@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TroViet - Quản lý phòng trọ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand" onclick="window.location.reload()">
+            <div class="brand-icon"><span class="material-icons-round" style="color: white;">apartment</span></div>
+            <span class="brand-name">TroViet</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="left-col">
+                <h1 class="hero-title">Đơn giản hóa việc quản lý tài sản</h1>
+                <p class="hero-desc">Kết nối chủ nhà và người thuê lại gần nhau với công cụ mạnh mẽ để quản lý, thanh toán và giao tiếp.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon-box"><span class="material-icons-round">dashboard</span></div>
+                        <div class="feature-content"><h3>Bảng điều khiển</h3><p>Quản lý tập trung mọi thứ</p></div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-box"><span class="material-icons-round">analytics</span></div>
+                        <div class="feature-content"><h3>Phân tích tài chính</h3><p>Trực quan hóa dòng tiền</p></div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="stats-grid">
+                    <div><div class="stat-val">1000+</div><div class="stat-label">Bất động sản</div></div>
+                    <div><div class="stat-val">5000+</div><div class="stat-label">Người dùng</div></div>
+                    <div><div class="stat-val">99%</div><div class="stat-label">Hài lòng</div></div>
+                </div>
+            </div>
+
+            <div class="auth-wrapper">
+                
+                <div id="roleSelection">
+                    <div class="section-header"><h2>Bắt đầu</h2><p>Chọn vai trò của bạn để tiếp tục</p></div>
+                    
+                    <div class="role-card role-landlord" onclick="openAuth('landlord')">
+                        <div class="role-icon"><span class="material-icons-round" style="font-size: 32px;">domain</span></div>
+                        <div class="role-content">
+                            <h3>Tôi là chủ nhà</h3>
+                            <p>Quản lý tài sản, theo dõi thanh toán.</p>
+                            <div class="action-row"><span>Đăng nhập / Đăng ký</span> <span class="material-icons-round">arrow_forward</span></div>
+                        </div>
+                    </div>
+
+                    <div class="role-card role-tenant" onclick="openAuth('tenant')">
+                        <div class="role-icon"><span class="material-icons-round" style="font-size: 32px;">people_alt</span></div>
+                        <div class="role-content">
+                            <h3>Tôi là người thuê nhà</h3>
+                            <p>Thanh toán tiền thuê, xem hợp đồng.</p>
+                            <div class="action-row"><span>Đăng nhập ngay</span> <span class="material-icons-round">arrow_forward</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="authContainer" class="auth-container">
+                    <div class="auth-top">
+                        <h3 id="formTitle">Đăng nhập</h3>
+                        <button class="btn-close" onclick="resetView()"><span class="material-icons-round">close</span></button>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Đăng nhập</button>
+                        <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Đăng ký</button>
+                    </div>
+
+                    <div id="formLoginView" class="form-section active">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại hoặc Email</label>
+                                <input type="text" id="loginId" class="form-input" placeholder="Nhập thông tin..." required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu</label>
+                                <input type="password" id="loginPass" class="form-input" placeholder="••••••••" required>
+
+                                <p id="loginError" style="color: #ef4444; font-size: 0.85rem; margin-top: 6px; display: none;">
+                                    Sai tài khoản hoặc mật khẩu
+                                </p>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <span class="spinner"></span> <span class="btn-text">Đăng nhập</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="formRegisterView" class="form-section">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" id="regName" class="form-input" placeholder="Nguyễn Văn A" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" id="regPhone" class="form-input" placeholder="0909..." required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" id="regEmail" class="form-input" placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu</label>
+                                <input type="password" id="regPass" class="form-input" placeholder="Tạo mật khẩu" required>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <span class="spinner"></span> <span class="btn-text">Đăng ký tài khoản</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Cấu hình API URL
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        // Biến lưu trạng thái vai trò hiện tại
+        let currentRole = null; 
+
+        // Hàm lấy element an toàn (tránh lỗi null)
+        const getEl = (id) => document.getElementById(id);
+
+        // 1. Mở form Authentication
+        function openAuth(role) {
+            console.log("Đang mở vai trò:", role);
+            currentRole = role;
+            
+            try {
+                // Lấy các element cần thiết
+                const roleSelection = getEl('roleSelection');
+                const authContainer = getEl('authContainer');
+                const legalLinks = getEl('legalLinks');
+                const formTitle = getEl('formTitle');
+                const tabRegister = getEl('tabRegister');
+                const tabLogin = getEl('tabLogin');
+                const switchText = getEl('switchText');
+
+                // UI Transition: Hiện Form trước để tránh màn hình trắng
+                if (authContainer) authContainer.style.display = 'block';
+                if (roleSelection) roleSelection.style.display = 'none';
+                if (legalLinks) legalLinks.style.display = 'none';
+                
+                // Reset về tab login
+                switchTab('login'); 
+                if (authContainer) authContainer.classList.remove('theme-tenant');
+
+                if (role === 'landlord') {
+                    // --- CẤU HÌNH CHO CHỦ NHÀ ---
+                    if (formTitle) formTitle.innerText = "Kênh Chủ Nhà";
+                    if (tabRegister) tabRegister.style.display = 'block'; // Hiện tab Đăng ký
+                    if (tabLogin) tabLogin.style.width = 'auto'; // Reset độ rộng
+                    if (switchText) switchText.style.display = 'block'; // Hiện dòng text chuyển đổi
+                } else {
+                    // --- CẤU HÌNH CHO KHÁCH THUÊ ---
+                    if (formTitle) formTitle.innerText = "Kênh Khách Thuê";
+                    if (authContainer) authContainer.classList.add('theme-tenant'); // Đổi màu xanh lá
+                    if (tabRegister) tabRegister.style.display = 'none'; // Ẩn tab Đăng ký
+                    if (tabLogin) tabLogin.style.width = '100%'; // Tab login full width
+                    if (switchText) switchText.style.display = 'none'; // Ẩn dòng text chuyển đổi
+                }
+            } catch (error) {
+                console.error("Lỗi trong openAuth:", error);
+                alert("Có lỗi xảy ra khi mở form. Vui lòng kiểm tra Console (F12).");
+            }
+        }
+
+        // 2. Chuyển Tab Login <-> Register
+        function switchTab(type) {
+            const tabLogin = getEl('tabLogin');
+            const tabRegister = getEl('tabRegister');
+            const formLoginView = getEl('formLoginView');
+            const formRegisterView = getEl('formRegisterView');
+
+            if (type === 'login') {
+                if(tabLogin) tabLogin.classList.add('active');
+                if(tabRegister) tabRegister.classList.remove('active');
+                if(formLoginView) formLoginView.classList.add('active');
+                if(formRegisterView) formRegisterView.classList.remove('active');
+            } else {
+                if(tabLogin) tabLogin.classList.remove('active');
+                if(tabRegister) tabRegister.classList.add('active');
+                if(formLoginView) formLoginView.classList.remove('active');
+                if(formRegisterView) formRegisterView.classList.add('active');
+            }
+        }
+
+        // 3. Quay lại màn hình chọn
+        function resetView() {
+            const roleSelection = getEl('roleSelection');
+            const authContainer = getEl('authContainer');
+            const legalLinks = getEl('legalLinks');
+
+            if(authContainer) authContainer.style.display = 'none';
+            if(roleSelection) roleSelection.style.display = 'block';
+            if(legalLinks) legalLinks.style.display = 'block';
+        }
+
+        // Helper: Loading effect
+        const setLoading = (btn, isLoading) => {
+            const spinner = btn.querySelector('.spinner');
+            const text = btn.querySelector('.btn-text');
+            if(isLoading) {
+                if(spinner) spinner.style.display = 'inline-block';
+                if(text) text.style.opacity = '0.7';
+                btn.disabled = true;
+            } else {
+                if(spinner) spinner.style.display = 'none';
+                if(text) text.style.opacity = '1';
+                btn.disabled = false;
+            }
+        }
+
+        // --- XỬ LÝ API ĐĂNG NHẬP ---
+        const loginForm = getEl('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Lấy các element
+                const btn = e.target.querySelector('button');
+                const idVal = getEl('loginId').value;
+                const passVal = getEl('loginPass').value;
+                const errorEl = getEl('loginError'); // Thẻ thông báo lỗi mới thêm
+
+                // Reset trạng thái lỗi (ẩn đi trước khi gọi API)
+                if(errorEl) errorEl.style.display = 'none';
+
+                setLoading(btn, true);
+
+                const endpoint = currentRole === 'landlord' ? '/login/landlord' : '/login/tenant';
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: idVal, password: passVal })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (res.ok) {
+                        // --- TRƯỜNG HỢP THÀNH CÔNG ---
+                        // 1. Lưu token
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('userRole', data.user.role);
+                        
+                        // 2. Không hiện thông báo, chuyển trang ngay lập tức
+                        if(currentRole === 'landlord') {
+                            window.location.href = '../trangchu-lord/trangchu.html'; // Đường dẫn file chủ nhà
+                        } else {
+                            window.location.href = '../trangchu-tenant/trangchu.html'; // Đường dẫn file khách
+                        }
+
+                    } else {
+                        // --- TRƯỜNG HỢP THẤT BẠI ---
+                        // Hiển thị text lỗi dưới ô mật khẩu
+                        if(errorEl) {
+                            errorEl.innerText = data.message || 'Tên đăng nhập hoặc mật khẩu không đúng';
+                            errorEl.style.display = 'block';
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    // Lỗi mạng/server
+                    if(errorEl) {
+                        errorEl.innerText = 'Không thể kết nối đến Server.';
+                        errorEl.style.display = 'block';
+                    }
+                } finally {
+                    setLoading(btn, false);
+                }
+            });
+            
+            // Tùy chọn: Khi người dùng bắt đầu gõ lại, thì ẩn thông báo lỗi đi cho đỡ rối
+            const inputs = loginForm.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const errorEl = getEl('loginError');
+                    if(errorEl) errorEl.style.display = 'none';
+                });
+            });
+        }
+
+        // --- XỬ LÝ API ĐĂNG KÝ ---
+        const registerForm = getEl('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                
+                const payload = {
+                    full_name: getEl('regName').value,
+                    phone: getEl('regPhone').value,
+                    email: getEl('regEmail').value,
+                    password: getEl('regPass').value
+                };
+
+                setLoading(btn, true);
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/register/landlord`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        alert('Đăng ký thành công! Vui lòng đăng nhập.');
+                        switchTab('login');
+                        getEl('loginId').value = payload.phone;
+                    } else {
+                        alert(data.message || 'Đăng ký thất bại');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Lỗi kết nối Server.');
+                } finally {
+                    setLoading(btn, false);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

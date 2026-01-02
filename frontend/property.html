@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Nhà Trọ - TroViet</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/property.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box"><i class="fas fa-home"></i></div>
+            <div class="brand-name">
+                <h1>TroViet</h1>
+                <p>Cổng Chủ nhà</p>
+            </div>
+        </div>
+        <div class="user-profile">
+            <div class="avatar">AD</div>
+            <div class="user-info">
+                <p class="name">Admin Demo</p>
+                <p class="email">admin@troviet.com</p>
+            </div>
+            <i class="fas fa-bell notification-icon"></i>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="#" class="menu-item"><i class="fas fa-chart-pie"></i><span>Tổng quan</span></a></li>
+                <li><a href="#" class="menu-item active"><i class="fas fa-building"></i><span>Nhà trọ</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-users"></i><span>Người thuê</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-dollar-sign"></i><span>Hóa đơn</span></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="page-title">
+                <h2>Quản lý Bất động sản</h2>
+                <p>Danh sách các tòa nhà và phòng trọ của bạn</p>
+            </div>
+            <button class="btn-primary" onclick="openModal('modal-house')">
+                <i class="fas fa-plus mr-2"></i> Thêm nhà trọ
+            </button>
+        </header>
+
+        <div class="content-scroll">
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-home"></i></div>
+                    <p class="stat-label">Tổng số phòng</p>
+                    <p class="stat-value" id="stat-total">...</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-user-check"></i></div>
+                    <p class="stat-label">Đã thuê</p>
+                    <p class="stat-value" id="stat-occupied">...</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-door-open"></i></div>
+                    <p class="stat-label">Còn trống</p>
+                    <p class="stat-value" id="stat-vacant">...</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-chart-line"></i></div>
+                    <p class="stat-label">Doanh thu dự kiến</p>
+                    <p class="stat-value" id="stat-revenue">...</p>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="house-tabs" id="house-tabs-container">
+                    <span style="padding: 10px; color: gray;">Đang tải danh sách nhà...</span>
+                </div>
+                
+                <div class="search-actions">
+                    <button class="btn-green" onclick="checkAndOpenRoomModal()">
+                        <i class="fas fa-plus-circle mr-2"></i> Thêm Phòng
+                    </button>
+                    <div class="search-box">
+                        <input type="text" placeholder="Tìm phòng...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h3 class="section-title">Danh sách phòng</h3>
+                <button class="btn-filter"><i class="fas fa-filter mr-2"></i> Lọc trạng thái</button>
+            </div>
+
+            <div class="rooms-grid" id="rooms-container">
+                </div>
+        </div>
+    </main>
+
+    <div id="modal-house" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">Tạo Bất động sản mới</h3>
+                    <p class="modal-desc">Thêm tòa nhà, chung cư hoặc dãy trọ mới.</p>
+                </div>
+                <span class="close-btn" onclick="closeModal('modal-house')"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="modal-body">
+                <form id="form-house">
+                    <div class="form-group">
+                        <label class="form-label">Tên bất động sản <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-home input-icon"></i>
+                            <input type="text" id="inp-house-name" class="form-input" placeholder="Ví dụ: Chung cư Sunrise City">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Địa chỉ</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                            <input type="text" id="inp-house-addr" class="form-input" placeholder="Địa chỉ chi tiết">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Dịch vụ chung (Mặc định cho các phòng)</label>
+                        <div id="service-list-house" class="service-list-container">
+                            </div>
+                        <button type="button" class="btn-add-service" onclick="addServiceRow('house')">
+                            <i class="fas fa-plus"></i> Thêm dịch vụ
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mô tả</label>
+                        <textarea id="inp-house-desc" class="form-textarea" placeholder="Mô tả chung về khu trọ..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-house')">Hủy</button>
+                <button class="btn-submit" onclick="submitHouse()">Tạo Bất động sản</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-room" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title">Tạo Phòng mới</h3>
+                <span class="close-btn" onclick="closeModal('modal-room')"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="modal-body">
+                <form id="form-room">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Số phòng <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="far fa-building input-icon"></i>
+                                <input type="text" id="inp-room-number" class="form-input" placeholder="Ví dụ: P101">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tầng</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-layer-group input-icon"></i>
+                                <input type="number" id="inp-room-floor" class="form-input" placeholder="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Diện tích (m²)</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-ruler-combined input-icon"></i>
+                                <input type="number" id="inp-room-area" class="form-input" placeholder="30">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Giá thuê (VNĐ) <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-dollar-sign input-icon"></i>
+                                <input type="text" id="inp-room-rent" class="form-input" placeholder="5000000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tiện nghi (Nội thất)</label>
+                        <textarea id="inp-room-facilities" class="form-textarea" placeholder="Giường, Tủ, Điều hòa..."></textarea>
+                    </div>
+                </form>
+
+                <div class="form-group">
+                    <label class="form-label">Dịch vụ & Tiện ích (Kế thừa từ nhà + Riêng)</label>
+                    <div id="service-list-room" class="service-list-container">
+                        </div>
+                    <button type="button" class="btn-add-service" onclick="addServiceRow('room')">
+                        <i class="fas fa-plus"></i> Tạo thêm dịch vụ
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-room')">Hủy</button>
+                <button class="btn-submit" onclick="submitRoom()">Lưu phòng</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="property.js">
+        
+    </script>
+</body>
+</html>

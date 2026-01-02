@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Landlord Dashboard - TroViet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#009688", // Teal color from the active menu
+                        "background-light": "#f3f4f6", // Light gray background
+                        "background-dark": "#111827", // Dark blue/gray background
+                        "sidebar-bg": "#1e3a8a", // Deep blue for sidebar
+                        "sidebar-bg-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': "0.75rem",
+                        '2xl': "1rem",
+                        '3xl': "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        /* Base Styles */
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6;
+            color: #1f2937;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        body.dark { 
+            background-color: #111827; 
+            color: #e5e7eb;
+        }
+        
+        /* Layout */
+        .main-container { 
+            display: flex; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+        .main-content { 
+            flex: 1; 
+            overflow-y: auto; 
+            position: relative; 
+            scroll-behavior: smooth; 
+        }
+        .content-wrapper { 
+            padding: 2rem; 
+            max-width: 80rem; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 2rem; 
+        }
+        
+        /* Sidebar */
+        .sidebar { 
+            width: 16rem; 
+            background-color: #1a237e; 
+            display: flex; 
+            flex-direction: column; 
+            color: white; 
+            transition: background-color 0.2s; 
+            flex-shrink: 0; 
+        }
+        body.dark .sidebar { 
+            background-color: #0f172a; 
+        }
+        .sidebar-header { 
+            height: 5rem; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 1.5rem; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .logo-icon { 
+            width: 2.5rem; 
+            height: 2.5rem; 
+            background-color: white; 
+            color: #1a237e; 
+            border-radius: 0.75rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-right: 0.75rem; 
+        }
+        .logo-text h1 { 
+            font-weight: 700; 
+            font-size: 1.125rem; 
+            line-height: 1.25; 
+        }
+        .logo-text p { 
+            font-size: 0.75rem; 
+            color: #d1d5db; 
+        }
+        .user-section { 
+            padding: 1.5rem; 
+            display: flex; 
+            align-items: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            margin-bottom: 0.5rem; 
+        }
+        .user-avatar { 
+            width: 2.5rem; 
+            height: 2.5rem; 
+            border-radius: 50%; 
+            background-color: #2563eb; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.875rem; 
+            font-weight: 600; 
+            margin-right: 0.75rem; 
+        }
+        .user-info { 
+            flex: 1; 
+            min-width: 0; 
+        }
+        .user-info p:first-child { 
+            font-size: 0.875rem; 
+            font-weight: 500; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+        }
+        .user-info p:last-child { 
+            font-size: 0.75rem; 
+            color: #9ca3af; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+        }
+        .notif-btn { 
+            color: #9ca3af; 
+            transition: color 0.2s; 
+            background: none; 
+            border: none; 
+            cursor: pointer; 
+        }
+        .notif-btn:hover { 
+            color: white; 
+        }
+        .nav-menu { 
+            flex: 1; 
+            padding: 0 1rem; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0.5rem; 
+            overflow-y: auto; 
+        }
+        .nav-link { 
+            display: flex; 
+            align-items: center; 
+            padding: 0.75rem 1rem; 
+            color: #d1d5db; 
+            border-radius: 0.75rem; 
+            transition: all 0.2s; 
+            text-decoration: none; 
+        }
+        .nav-link:hover { 
+            background-color: rgba(255, 255, 255, 0.1); 
+            color: white; 
+        }
+        .nav-link.active { 
+            background-color: #009688; 
+            color: white; 
+            box-shadow: 0 10px 15px -3px rgba(0, 150, 136, 0.3), 0 4px 6px -2px rgba(0, 150, 136, 0.3); 
+        }
+        .nav-icon { 
+            margin-right: 0.75rem; 
+            font-size: 1.25rem; 
+        }
+        .sidebar-footer { 
+            padding: 1rem; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0.5rem; 
+            border-top: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        
+        /* Header */
+        .page-header { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            gap: 1rem; 
+        }
+        @media (min-width: 768px) {
+            .page-header { 
+                flex-direction: row; 
+                align-items: flex-end; 
+            }
+        }
+        .page-title { 
+            font-size: 1.875rem; 
+            font-weight: 700; 
+            color: #1f2937; 
+        }
+        body.dark .page-title { 
+            color: white; 
+        }
+        .page-subtitle { 
+            color: #6b7280; 
+            margin-top: 0.25rem; 
+        }
+        body.dark .page-subtitle { 
+            color: #9ca3af; 
+        }
+        .date-section { 
+            text-align: right; 
+        }
+        .date-label { 
+            font-size: 0.875rem; 
+            color: #6b7280; 
+        }
+        body.dark .date-label { 
+            color: #9ca3af; 
+        }
+        .date-value { 
+            font-size: 1.125rem; 
+            font-weight: 600; 
+            color: #009688; 
+        }
+        
+        /* Stats Grid */
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1.5rem; 
+        }
+        @media (min-width: 768px) {
+            .stats-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
+        @media (min-width: 1024px) {
+            .stats-grid { 
+                grid-template-columns: repeat(4, 1fr); 
+            }
+        }
+        .stat-card { 
+            background-color: white; 
+            padding: 1.5rem; 
+            border-radius: 1rem; 
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+            border: 1px solid #f3f4f6; 
+            transition: box-shadow 0.2s; 
+        }
+        body.dark .stat-card { 
+            background-color: #1f2937; 
+            border-color: #374151; 
+        }
+        .stat-card:hover { 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .stat-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 1rem; 
+        }
+        .stat-icon { 
+            padding: 0.75rem; 
+            border-radius: 0.75rem; 
+        }
+        .stat-icon.blue { 
+            background-color: #eff6ff; 
+            color: #2563eb; 
+        }
+        body.dark .stat-icon.blue { 
+            background-color: rgba(30, 58, 138, 0.3); 
+            color: #60a5fa; 
+        }
+        .stat-icon.teal { 
+            background-color: #f0fdfa; 
+            color: #14b8a6; 
+        }
+        body.dark .stat-icon.teal { 
+            background-color: rgba(19, 78, 74, 0.3); 
+            color: #5eead4; 
+        }
+        .stat-icon.green { 
+            background-color: #f0fdf4; 
+            color: #16a34a; 
+        }
+        body.dark .stat-icon.green { 
+            background-color: rgba(20, 83, 45, 0.3); 
+            color: #4ade80; 
+        }
+        .stat-icon.orange { 
+            background-color: #fff7ed; 
+            color: #ea580c; 
+        }
+        body.dark .stat-icon.orange { 
+            background-color: rgba(154, 52, 18, 0.3); 
+            color: #fb923c; 
+        }
+        .stat-badge { 
+            font-size: 0.75rem; 
+            font-weight: 500; 
+            padding: 0.25rem 0.5rem; 
+            border-radius: 0.5rem; 
+            display: flex; 
+            align-items: center; 
+        }
+        .stat-badge.positive { 
+            color: #10b981; 
+            background-color: #ecfdf5; 
+        }
+        body.dark .stat-badge.positive { 
+            background-color: rgba(6, 78, 59, 0.3); 
+        }
+        .stat-badge.negative { 
+            color: #ef4444; 
+            background-color: #fef2f2; 
+        }
+        body.dark .stat-badge.negative { 
+            background-color: rgba(153, 27, 27, 0.3); 
+        }
+        .stat-badge-icon { 
+            font-size: 0.875rem; 
+            margin-right: 0.25rem; 
+        }
+        .stat-label { 
+            font-size: 0.875rem; 
+            color: #6b7280; 
+            margin-bottom: 0.25rem; 
+        }
+        body.dark .stat-label { 
+            color: #9ca3af; 
+        }
+        .stat-value { 
+            font-size: 1.875rem; 
+            font-weight: 700; 
+            color: #1f2937; 
+        }
+        body.dark .stat-value { 
+            color: white; 
+        }
+        .stat-value.tight { 
+            letter-spacing: -0.025em; 
+        }
+        .stat-note { 
+            font-size: 0.75rem; 
+            color: #9ca3af; 
+            margin-top: 0.5rem; 
+        }
+        
+        /* Charts Grid */
+        .charts-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1.5rem; 
+        }
+        @media (min-width: 1024px) {
+            .charts-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+            }
+        }
+        .chart-card { 
+            background-color: white; 
+            padding: 1.5rem; 
+            border-radius: 1rem; 
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+            border: 1px solid #f3f4f6; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        body.dark .chart-card { 
+            background-color: #1f2937; 
+            border-color: #374151; 
+        }
+        .chart-card.wide { 
+            grid-column: span 2; 
+        }
+        .chart-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 1.5rem; 
+        }
+        .chart-title { 
+            font-size: 1.125rem; 
+            font-weight: 700; 
+            color: #1f2937; 
+        }
+        body.dark .chart-title { 
+            color: white; 
+        }
+        .chart-subtitle { 
+            font-size: 0.875rem; 
+            color: #6b7280; 
+        }
+        body.dark .chart-subtitle { 
+            color: #9ca3af; 
+        }
+        .chart-placeholder { 
+            height: 2rem; 
+            width: 6rem; 
+            background-color: #f3f4f6; 
+            border-radius: 0.5rem; 
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; 
+        }
+        body.dark .chart-placeholder { 
+            background-color: #374151; 
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chart-container { 
+            flex: 1; 
+            display: flex; 
+            align-items: flex-end; 
+            justify-content: space-between; 
+            gap: 1rem; 
+            height: 16rem; 
+            padding: 0 1rem 0.5rem; 
+            border-bottom: 1px solid #f3f4f6; 
+            position: relative; 
+        }
+        body.dark .chart-container { 
+            border-color: #374151; 
+        }
+        .chart-grid-lines { 
+            position: absolute; 
+            inset: 0; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            pointer-events: none; 
+            padding-bottom: 2rem; 
+            font-size: 0.75rem; 
+            color: #d1d5db; 
+        }
+        body.dark .chart-grid-lines { 
+            color: #4b5563; 
+        }
+        .chart-grid-line { 
+            width: 100%; 
+            border-top: 1px dashed #f3f4f6; 
+        }
+        body.dark .chart-grid-line { 
+            border-color: #374151; 
+        }
+        .chart-bar { 
+            z-index: 10; 
+            width: 100%; 
+            border-radius: 0.5rem 0.5rem 0 0; 
+            position: relative; 
+        }
+        .chart-bar.blue { 
+            background-color: #dbeafe; 
+        }
+        body.dark .chart-bar.blue { 
+            background-color: rgba(30, 58, 138, 0.3); 
+        }
+        .chart-bar.primary { 
+            background-color: #009688; 
+            box-shadow: 0 10px 15px -3px rgba(0, 150, 136, 0.2), 0 4px 6px -2px rgba(0, 150, 136, 0.2); 
+        }
+        .chart-bar.h40 { 
+            height: 40%; 
+        }
+        .chart-bar.h45 { 
+            height: 45%; 
+        }
+        .chart-bar.h55 { 
+            height: 55%; 
+        }
+        .chart-bar.h60 { 
+            height: 60%; 
+        }
+        .chart-bar.h70 { 
+            height: 70%; 
+        }
+        .chart-bar.h80 { 
+            height: 80%; 
+        }
+        .chart-tooltip { 
+            opacity: 0; 
+            position: absolute; 
+            top: -2.5rem; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background-color: #1f2937; 
+            color: white; 
+            font-size: 0.75rem; 
+            padding: 0.25rem 0.5rem; 
+            border-radius: 0.25rem; 
+            transition: opacity 0.2s; 
+        }
+        .chart-bar:hover .chart-tooltip { 
+            opacity: 1; 
+        }
+        .chart-labels { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 1rem; 
+            padding: 0 1rem; 
+            font-size: 0.75rem; 
+            color: #9ca3af; 
+            font-weight: 500; 
+        }
+        .chart-footer { 
+            margin-top: 1.5rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 0.875rem; 
+        }
+        .chart-trend { 
+            display: flex; 
+            align-items: center; 
+            color: #10b981; 
+            font-weight: 500; 
+        }
+        .chart-trend-icon { 
+            margin-right: 0.25rem; 
+            font-size: 1rem; 
+        }
+        .chart-trend-text { 
+            color: #9ca3af; 
+            font-weight: 400; 
+            margin-left: 0.5rem; 
+        }
+        body.dark .chart-trend-text { 
+            color: #6b7280; 
+        }
+        .chart-link { 
+            color: #009688; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            transition: color 0.2s; 
+        }
+        .chart-link:hover { 
+            color: #00796b; 
+        }
+        body.dark .chart-link:hover { 
+            color: #4db6ac; 
+        }
+        .chart-link-icon { 
+            font-size: 1rem; 
+            margin-left: 0.25rem; 
+        }
+        
+        /* Payment List */
+        .payment-list { 
+            flex: 1; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1rem; 
+            padding-right: 0.25rem; 
+        }
+        .payment-item { 
+            display: flex; 
+            align-items: center; 
+            background-color: #f9fafb; 
+            padding: 0.75rem; 
+            border-radius: 0.75rem; 
+        }
+        body.dark .payment-item { 
+            background-color: rgba(55, 65, 81, 0.3); 
+        }
+        .payment-room { 
+            width: 2.5rem; 
+            height: 2.5rem; 
+            border-radius: 0.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            margin-right: 0.75rem; 
+        }
+        .payment-room.blue { 
+            background-color: #dbeafe; 
+            color: #2563eb; 
+        }
+        body.dark .payment-room.blue { 
+            background-color: #1e3a8a; 
+            color: #93c5fd; 
+        }
+        .payment-room.indigo { 
+            background-color: #e0e7ff; 
+            color: #4f46e5; 
+        }
+        body.dark .payment-room.indigo { 
+            background-color: #312e81; 
+            color: #a5b4fc; 
+        }
+        .payment-room.sky { 
+            background-color: #e0f2fe; 
+            color: #0284c7; 
+        }
+        body.dark .payment-room.sky { 
+            background-color: #0c4a6e; 
+            color: #7dd3fc; 
+        }
+        .payment-room.purple { 
+            background-color: #f3e8ff; 
+            color: #9333ea; 
+        }
+        body.dark .payment-room.purple { 
+            background-color: #581c87; 
+            color: #c084fc; 
+        }
+        .payment-details { 
+            flex: 1; 
+            min-width: 0; 
+        }
+        .payment-name { 
+            font-size: 0.875rem; 
+            font-weight: 600; 
+            color: #1f2937; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+        }
+        body.dark .payment-name { 
+            color: white; 
+        }
+        .payment-date { 
+            font-size: 0.75rem; 
+            color: #6b7280; 
+            display: flex; 
+            align-items: center; 
+        }
+        body.dark .payment-date { 
+            color: #9ca3af; 
+        }
+        .payment-date-icon { 
+            font-size: 0.625rem; 
+            margin-right: 0.25rem; 
+        }
+        .payment-amount { 
+            text-align: right; 
+        }
+        .payment-amount-value { 
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+        .payment-amount-value.blue { 
+            color: #2563eb; 
+        }
+        body.dark .payment-amount-value.blue { 
+            color: #60a5fa; 
+        }
+        .payment-amount-value.indigo { 
+            color: #4f46e5; 
+        }
+        body.dark .payment-amount-value.indigo { 
+            color: #818cf8; 
+        }
+        .payment-amount-value.sky { 
+            color: #0284c7; 
+        }
+        body.dark .payment-amount-value.sky { 
+            color: #38bdf8; 
+        }
+        .payment-amount-value.purple { 
+            color: #9333ea; 
+        }
+        body.dark .payment-amount-value.purple { 
+            color: #a78bfa; 
+        }
+        .payment-status { 
+            font-size: 0.625rem; 
+            font-weight: 500; 
+        }
+        .payment-status.warning { 
+            color: #f97316; 
+        }
+        .payment-status.danger { 
+            color: #ef4444; 
+        }
+        
+        /* Activity List */
+        .activity-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.5rem; 
+        }
+        .activity-item { 
+            display: flex; 
+            align-items: flex-start; 
+        }
+        .activity-icon { 
+            width: 2.5rem; 
+            height: 2.5rem; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-right: 1rem; 
+            flex-shrink: 0; 
+            font-size: 1.25rem; 
+        }
+        .activity-icon.green { 
+            background-color: #f0fdf4; 
+            color: #16a34a; 
+        }
+        body.dark .activity-icon.green { 
+            background-color: rgba(20, 83, 45, 0.3); 
+            color: #4ade80; 
+        }
+        .activity-icon.orange { 
+            background-color: #fff7ed; 
+            color: #ea580c; 
+        }
+        body.dark .activity-icon.orange { 
+            background-color: rgba(154, 52, 18, 0.3); 
+            color: #fb923c; 
+        }
+        .activity-icon.teal { 
+            background-color: #f0fdfa; 
+            color: #14b8a6; 
+        }
+        body.dark .activity-icon.teal { 
+            background-color: rgba(19, 78, 74, 0.3); 
+            color: #5eead4; 
+        }
+        .activity-icon.blue { 
+            background-color: #eff6ff; 
+            color: #2563eb; 
+        }
+        body.dark .activity-icon.blue { 
+            background-color: rgba(30, 58, 138, 0.3); 
+            color: #60a5fa; 
+        }
+        .activity-content { 
+            flex: 1; 
+        }
+        .activity-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+        }
+        .activity-title { 
+            font-size: 0.875rem; 
+            font-weight: 600; 
+            color: #1f2937; 
+        }
+        body.dark .activity-title { 
+            color: white; 
+        }
+        .activity-time { 
+            font-size: 0.75rem; 
+            color: #9ca3af; 
+        }
+        .activity-desc { 
+            font-size: 0.875rem; 
+            color: #6b7280; 
+            margin-top: 0.25rem; 
+        }
+        body.dark .activity-desc { 
+            color: #9ca3af; 
+        }
+        
+        /* Property Cards */
+        .property-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.5rem; 
+        }
+        .property-card { 
+            border: 1px solid #f3f4f6; 
+            border-radius: 0.75rem; 
+            padding: 1rem; 
+            transition: box-shadow 0.2s; 
+        }
+        body.dark .property-card { 
+            border-color: #374151; 
+        }
+        .property-card:hover { 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .property-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 1rem; 
+        }
+        .property-name { 
+            font-weight: 600; 
+            color: #1f2937; 
+        }
+        body.dark .property-name { 
+            color: white; 
+        }
+        .property-trend { 
+            font-size: 1.125rem; 
+        }
+        .property-trend.up { 
+            color: #10b981; 
+        }
+        .property-trend.down { 
+            color: #ef4444; 
+        }
+        .property-stats { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 0.5rem; 
+            margin-bottom: 0.75rem; 
+        }
+        .property-stat-label { 
+            font-size: 0.75rem; 
+            color: #6b7280; 
+        }
+        body.dark .property-stat-label { 
+            color: #9ca3af; 
+        }
+        .property-stat-value { 
+            font-size: 0.875rem; 
+            font-weight: 500; 
+            color: #1f2937; 
+        }
+        .property-stat-value.primary { 
+            color: #009688; 
+        }
+        .property-stat-value.blue { 
+            color: #2563eb; 
+        }
+        body.dark .property-stat-value { 
+            color: white; 
+        }
+        body.dark .property-stat-value.blue { 
+            color: #60a5fa; 
+        }
+        .property-stat-value.right { 
+            text-align: right; 
+        }
+        .property-progress { 
+            width: 100%; 
+            background-color: #f3f4f6; 
+            border-radius: 9999px; 
+            height: 0.5rem; 
+            overflow: hidden; 
+        }
+        body.dark .property-progress { 
+            background-color: #374151; 
+        }
+        .property-progress-bar { 
+            background-color: #009688; 
+            height: 0.5rem; 
+            border-radius: 9999px; 
+        }
+        .progress-87-5 { 
+            width: 87.5%; 
+        }
+        .progress-88 { 
+            width: 88%; 
+        }
+        .progress-83 { 
+            width: 83%; 
+        }
+        
+        /* Links */
+        .link-primary { 
+            font-size: 0.875rem; 
+            color: #009688; 
+            text-decoration: none; 
+            transition: text-decoration 0.2s; 
+        }
+        .link-primary:hover { 
+            text-decoration: underline; 
+        }
+        
+        /* Section Headers */
+        .section-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 1.5rem; 
+        }
+        .section-title { 
+            font-size: 1.125rem; 
+            font-weight: 700; 
+            color: #1f2937; 
+        }
+        body.dark .section-title { 
+            color: white; 
+        }
+        
+        /* Two Column Grid */
+        .two-col-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1.5rem; 
+        }
+        @media (min-width: 1024px) {
+            .two-col-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+<aside class="sidebar">
+<div class="sidebar-header">
+<div class="logo-icon">
+<span class="material-icons-outlined">home</span>
+</div>
+<div class="logo-text">
+<h1>TroViet</h1>
+<p>Công Chủ nhà</p>
+</div>
+</div>
+<div class="user-section">
+<div class="user-avatar">
+<span class="material-icons-outlined">person</span>
+</div>
+<div class="user-info">
+<p>Admin</p>
+<p>admin@troviet.com</p>
+</div>
+<button class="notif-btn">
+<span class="material-icons-outlined">notifications</span>
+</button>
+</div>
+<nav class="nav-menu">
+<a class="nav-link active" href="#">
+<span class="material-icons-outlined nav-icon">bar_chart</span>
+<span>Tổng quan</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">apartment</span>
+<span>Bất động sản</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">people_outline</span>
+<span>Người thuê</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">attach_money</span>
+<span>Hóa đơn</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">build</span>
+<span>Bảo trì</span>
+</a>
+</nav>
+<div class="sidebar-footer">
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">settings</span>
+<span>Cài đặt</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">logout</span>
+<span>Đăng xuất</span>
+</a>
+</div>
+</aside>
+<main class="main-content">
+<div class="content-wrapper">
+<header class="page-header">
+<div>
+<h2 class="page-title">Tổng quan</h2>
+<p class="page-subtitle">Chào mừng trở lại, Admin</p>
+</div>
+<div class="date-section">
+<p class="date-label">Hôm nay</p>
+<p class="date-value">Chủ nhật, 14 tháng 12, 2025</p>
+</div>
+</header>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-header">
+<div class="stat-icon blue">
+<span class="material-icons-outlined">home</span>
+</div>
+<span class="stat-badge positive">
+<span class="material-icons-outlined stat-badge-icon">trending_up</span> +2
+</span>
+</div>
+<p class="stat-label">Tổng Bất động sản</p>
+<h3 class="stat-value">12</h3>
+</div>
+<div class="stat-card">
+<div class="stat-header">
+<div class="stat-icon teal">
+<span class="material-icons-outlined">people</span>
+</div>
+<span class="stat-badge positive">
+<span class="material-icons-outlined stat-badge-icon">trending_up</span> 87%
+</span>
+</div>
+<p class="stat-label">Tỷ lệ lấp đầy</p>
+<h3 class="stat-value">87%</h3>
+<p class="stat-note">21 trên 24 phòng đã thuê</p>
+</div>
+<div class="stat-card">
+<div class="stat-header">
+<div class="stat-icon green">
+<span class="material-icons-outlined">attach_money</span>
+</div>
+<span class="stat-badge positive">
+<span class="material-icons-outlined stat-badge-icon">trending_up</span> +12.5%
+</span>
+</div>
+<p class="stat-label">Doanh thu hàng tháng</p>
+<h3 class="stat-value tight">45.200.000 đ</h3>
+<p class="stat-note">so với 40.177.000 đ tháng trước</p>
+</div>
+<div class="stat-card">
+<div class="stat-header">
+<div class="stat-icon orange">
+<span class="material-icons-outlined">build</span>
+</div>
+<span class="stat-badge negative">
+<span class="material-icons-outlined stat-badge-icon">schedule</span> 8 Đang mở
+</span>
+</div>
+<p class="stat-label">Yêu cầu bảo trì</p>
+<h3 class="stat-value">13</h3>
+<p class="stat-note">5 đang xử lý, 8 đang mở</p>
+</div>
+</div>
+<div class="charts-grid">
+<div class="chart-card wide">
+<div class="chart-header">
+<div>
+<h3 class="chart-title">Tổng quan doanh thu</h3>
+<p class="chart-subtitle">Doanh thu hàng tháng trong 6 tháng qua</p>
+</div>
+<div>
+<div class="chart-placeholder"></div>
+</div>
+</div>
+<div class="chart-container">
+<div class="chart-grid-lines">
+<div class="chart-grid-line"></div>
+<div class="chart-grid-line"></div>
+<div class="chart-grid-line"></div>
+<div class="chart-grid-line"></div>
+<div class="chart-grid-line"></div>
+</div>
+<div class="chart-bar blue h40">
+<div class="chart-tooltip">30M</div>
+</div>
+<div class="chart-bar blue h55">
+<div class="chart-tooltip">38M</div>
+</div>
+<div class="chart-bar blue h45">
+<div class="chart-tooltip">35M</div>
+</div>
+<div class="chart-bar blue h70">
+<div class="chart-tooltip">48M</div>
+</div>
+<div class="chart-bar blue h60">
+<div class="chart-tooltip">42M</div>
+</div>
+<div class="chart-bar primary h80">
+<div class="chart-tooltip">55M</div>
+</div>
+</div>
+<div class="chart-labels">
+<span>T7</span>
+<span>T8</span>
+<span>T9</span>
+<span>T10</span>
+<span>T11</span>
+<span>T12</span>
+</div>
+<div class="chart-footer">
+<div class="chart-trend">
+<span class="material-icons-outlined chart-trend-icon">trending_up</span>
++0%
+<span class="chart-trend-text">tăng so với kỳ trước</span>
+</div>
+<a class="chart-link" href="#">
+Xem Chi tiết <span class="material-icons-outlined chart-link-icon">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="chart-card">
+<div class="section-header">
+<h3 class="section-title">Khoản thanh toán tới</h3>
+<a class="link-primary" href="#">Xem tất cả</a>
+</div>
+<div class="payment-list">
+<div class="payment-item">
+<div class="payment-room blue">P301</div>
+<div class="payment-details">
+<p class="payment-name">Nguyễn Văn A</p>
+<p class="payment-date">
+<span class="material-icons-outlined payment-date-icon">schedule</span> 15/12
+</p>
+</div>
+<div class="payment-amount">
+<p class="payment-amount-value blue">4.500.000</p>
+<p class="payment-status danger">Sắp tới hạn</p>
+</div>
+</div>
+<div class="payment-item">
+<div class="payment-room indigo">P102</div>
+<div class="payment-details">
+<p class="payment-name">Trần Thị B</p>
+<p class="payment-date">
+<span class="material-icons-outlined payment-date-icon">schedule</span> 16/12
+</p>
+</div>
+<div class="payment-amount">
+<p class="payment-amount-value indigo">3.800.000</p>
+<p class="payment-status danger">Sắp tới hạn</p>
+</div>
+</div>
+<div class="payment-item">
+<div class="payment-room blue">P205</div>
+<div class="payment-details">
+<p class="payment-name">Lê Văn C</p>
+<p class="payment-date">
+<span class="material-icons-outlined payment-date-icon">schedule</span> 18/12
+</p>
+</div>
+<div class="payment-amount">
+<p class="payment-amount-value blue">5.200.000</p>
+<p class="payment-status danger">Sắp tới hạn</p>
+</div>
+</div>
+<div class="payment-item">
+<div class="payment-room sky">P404</div>
+<div class="payment-details">
+<p class="payment-name">Phạm Thị D</p>
+<p class="payment-date">
+<span class="material-icons-outlined payment-date-icon">schedule</span> 20/12
+</p>
+</div>
+<div class="payment-amount">
+<p class="payment-amount-value sky">4.200.000</p>
+<p class="payment-status warning">Đang chờ</p>
+</div>
+</div>
+<div class="payment-item">
+<div class="payment-room purple">P105</div>
+<div class="payment-details">
+<p class="payment-name">Hoàng Văn E</p>
+<p class="payment-date">
+<span class="material-icons-outlined payment-date-icon">schedule</span> 21/12
+</p>
+</div>
+<div class="payment-amount">
+<p class="payment-amount-value purple">3.500.000</p>
+<p class="payment-status warning">Đang chờ</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="two-col-grid">
+<div class="chart-card">
+<div class="section-header">
+<h3 class="section-title">Hoạt động gần đây</h3>
+<a class="link-primary" href="#">Xem Tất cả</a>
+</div>
+<div class="activity-list">
+<div class="activity-item">
+<div class="activity-icon green">
+<span class="material-icons-outlined">attach_money</span>
+</div>
+<div class="activity-content">
+<div class="activity-header">
+<h4 class="activity-title">Đã Nhận thanh toán</h4>
+<span class="activity-time">2 giờ trước</span>
+</div>
+<p class="activity-desc">Nguyễn Thị Mai - Căn hộ 204</p>
+</div>
+</div>
+<div class="activity-item">
+<div class="activity-icon orange">
+<span class="material-icons-outlined">build</span>
+</div>
+<div class="activity-content">
+<div class="activity-header">
+<h4 class="activity-title">Yêu cầu bảo trì mới</h4>
+<span class="activity-time">5 giờ trước</span>
+</div>
+<p class="activity-desc">Rò rỉ nước - Phòng 305A</p>
+</div>
+</div>
+<div class="activity-item">
+<div class="activity-icon teal">
+<span class="material-icons-outlined">person_add</span>
+</div>
+<div class="activity-content">
+<div class="activity-header">
+<h4 class="activity-title">Người thuê mới đã nhập</h4>
+<span class="activity-time">1 ngày trước</span>
+</div>
+<p class="activity-desc">Trần Văn B - Phòng 305A</p>
+</div>
+</div>
+<div class="activity-item">
+<div class="activity-icon blue">
+<span class="material-icons-outlined">event</span>
+</div>
+<div class="activity-content">
+<div class="activity-header">
+<h4 class="activity-title">Hợp đồng sắp hết hạn</h4>
+<span class="activity-time">2 ngày trước</span>
+</div>
+<p class="activity-desc">Phạm Thị D - Còn 45 ngày</p>
+</div>
+</div>
+</div>
+</div>
+<div class="chart-card">
+<div class="section-header">
+<h3 class="section-title">Bất động sản hàng đầu</h3>
+<a class="link-primary" href="#">Xem Tất cả</a>
+</div>
+<div class="property-list">
+<div class="property-card">
+<div class="property-header">
+<h4 class="property-name">Khu A - Sunrise Heights</h4>
+<span class="material-icons-outlined property-trend up">trending_up</span>
+</div>
+<div class="property-stats">
+<div>
+<p class="property-stat-label">Phòng</p>
+<p class="property-stat-value">24</p>
+</div>
+<div>
+<p class="property-stat-label">Đã thuê</p>
+<p class="property-stat-value primary">21/24</p>
+</div>
+<div class="property-stat-value right">
+<p class="property-stat-label">Doanh thu</p>
+<p class="property-stat-value blue">18.2tr</p>
+</div>
+</div>
+<div class="property-progress">
+<div class="property-progress-bar progress-87-5"></div>
+</div>
+</div>
+<div class="property-card">
+<div class="property-header">
+<h4 class="property-name">Khu B - Maple Court</h4>
+<span class="material-icons-outlined property-trend up">trending_up</span>
+</div>
+<div class="property-stats">
+<div>
+<p class="property-stat-label">Phòng</p>
+<p class="property-stat-value">18</p>
+</div>
+<div>
+<p class="property-stat-label">Đã thuê</p>
+<p class="property-stat-value primary">16/18</p>
+</div>
+<div class="property-stat-value right">
+<p class="property-stat-label">Doanh thu</p>
+<p class="property-stat-value blue">14.4tr</p>
+</div>
+</div>
+<div class="property-progress">
+<div class="property-progress-bar progress-88"></div>
+</div>
+</div>
+<div class="property-card">
+<div class="property-header">
+<h4 class="property-name">Khu C - Oak Avenue</h4>
+<span class="material-icons-outlined property-trend down">trending_down</span>
+</div>
+<div class="property-stats">
+<div>
+<p class="property-stat-label">Phòng</p>
+<p class="property-stat-value">12</p>
+</div>
+<div>
+<p class="property-stat-label">Đã thuê</p>
+<p class="property-stat-value primary">10/12</p>
+</div>
+<div class="property-stat-value right">
+<p class="property-stat-label">Doanh thu</p>
+<p class="property-stat-value blue">9.8tr</p>
+</div>
+</div>
+<div class="property-progress">
+<div class="property-progress-bar progress-83"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
