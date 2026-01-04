@@ -28,25 +28,29 @@
         </div>
         <nav class="menu">
             <ul>
-                <li><a href="#" class="menu-item"><i class="fas fa-chart-pie"></i><span>Tổng quan</span></a></li>
-                <li><a href="#" class="menu-item active"><i class="fas fa-building"></i><span>Nhà trọ</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-users"></i><span>Người thuê</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-dollar-sign"></i><span>Hóa đơn</span></a></li>
+                <li><a href="trangchu.html" class="menu-item"><i class="fas fa-chart-pie"></i><span>Tổng quan</span></a></li>
+                <li><a href="property.html" class="menu-item active"><i class="fas fa-building"></i><span>Bất động sản</span></a></li>
+                <li><a href="contract.html" class="menu-item"><i class="fas fa-users"></i><span>Người thuê</span></a></li>
+                <li><a href="invoices.html" class="menu-item"><i class="fas fa-dollar-sign"></i><span>Hóa đơn</span></a></li>
+                <li><a href="maintenance.html" class="menu-item"><i class="fas fa-wrench"></i><span>Bảo trì</span></a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
+            <a href="#" class="menu-item"><i class="fas fa-cog"></i><span>Cài đặt</span></a>
             <a href="#" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a>
         </div>
     </aside>
 
     <main class="main-content">
-        <header class="top-header">
+        <header class="top-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
             <div class="page-title">
-                <h2>Quản lý Bất động sản</h2>
-                <p>Danh sách các tòa nhà và phòng trọ của bạn</p>
+                <h2 style="font-size: 1.875rem; font-weight: 700; color: #1D4ED8; margin: 0 0 0.25rem 0;">Bất động sản</h2>
+                <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Quản lý danh sách nhà trọ và phòng</p>
             </div>
-            <button class="btn-primary" onclick="openModal('modal-house')">
-                <i class="fas fa-plus mr-2"></i> Thêm nhà trọ
+            <button class="btn-primary" onclick="openModal('modal-house')" style="background: #1D4ED8; color: white; border: none; border-radius: 0.5rem; padding: 0.625rem 1.25rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500;">
+                <i class="fas fa-home"></i>
+                <i class="fas fa-plus" style="font-size: 0.75rem;"></i>
+                <span>Thêm Nhà trọ</span>
             </button>
         </header>
 
@@ -75,29 +79,83 @@
                 </div>
             </div>
 
-            <div class="filter-bar">
-                <div class="house-tabs" id="house-tabs-container">
-                    <span style="padding: 10px; color: gray;">Đang tải danh sách nhà...</span>
-                </div>
-                
-                <div class="search-actions">
-                    <button class="btn-green" onclick="checkAndOpenRoomModal()">
-                        <i class="fas fa-plus-circle mr-2"></i> Thêm Phòng
-                    </button>
-                    <div class="search-box">
-                        <input type="text" placeholder="Tìm phòng...">
-                        <i class="fas fa-search"></i>
+            <!-- Danh sách nhà trọ với nhà trọ được chọn ở đầu -->
+            <div class="houses-section" style="margin-bottom: 1.5rem; background: white; border-radius: 1.5rem; border: 1px solid #e5e7eb; padding: 1.5rem 2rem; position: relative;">
+                <div style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #f3f4f6;">
+                    <div style="display: flex; align-items: flex-start; gap: 2rem; flex: 1; overflow-x: auto; width: 100%;">
+                        <div style="display: flex; gap: 1rem; min-width: max-content;">
+                            <!-- Nhà trọ được chọn (card lớn) -->
+                            <div id="active-house-card" class="active-house-card" style="display: none; min-width: max-content;">
+                                <div style="display: flex; align-items: start; gap: 2rem;">
+                                    <div class="house-icon-large" style="width: 64px; height: 64px; background: #DBEAFE; border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <i class="fas fa-home" style="font-size: 2.5rem; color: #1D4ED8;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 id="active-house-name" style="font-size: 1.25rem; font-weight: 700; color: #1D4ED8; margin: 0 0 0.25rem 0; word-wrap: break-word;">Tên nhà trọ</h3>
+                                        <p id="active-house-address" style="font-size: 0.875rem; color: #6b7280; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.25rem;">
+                                            <i class="fas fa-map-marker-alt" style="font-size: 1rem;"></i>
+                                            <span>Địa chỉ nhà trọ</span>
+                                        </p>
+                                        <table style="min-width: 100%; border-collapse: collapse;">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 0.5rem 0; white-space: nowrap;">
+                                                        <div>
+                                                            <p style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin: 0 0 0.25rem 0;">Doanh thu tháng</p>
+                                                            <p id="active-house-revenue" style="font-size: 1.125rem; font-weight: 700; color: #1f2937; margin: 0;">0 đ</p>
+                                                        </div>
+                                                    </td>
+                                                    <td style="padding: 0.5rem 0; white-space: nowrap; text-align: right;">
+                                                        <button class="btn-secondary" onclick="viewHouseDetail()" style="background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.625rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s;">
+                                                            Xem thêm
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Danh sách nhà trọ khác (icon bên phải) -->
+                            <div class="house-tabs" id="house-tabs-container" style="display: flex; flex-direction: row; gap: 1rem; flex-wrap: wrap;">
+                                <span style="padding: 10px; color: gray; font-size: 0.875rem;">Đang tải danh sách nhà...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Nút Thêm Phòng và mũi tên ở góc phải -->
+                    <div style="display: flex; align-items: center; gap: 1rem; width: 100%; justify-content: flex-end;">
+                        <button class="btn-add-room-top" onclick="checkAndOpenRoomModal()" style="background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.625rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s;">
+                            <i class="fas fa-plus" style="color: #059669; font-size: 1rem;"></i>
+                            <span style="color: #059669; font-size: 0.875rem; font-weight: 500;">Thêm Phòng</span>
+                        </button>
+                        <button id="houses-nav-next-btn" class="houses-nav-btn" onclick="nextHousesPage()" style="display: none; background: transparent; border: none; cursor: pointer; color: #1D4ED8; transition: all 0.2s;">
+                            <i class="fas fa-chevron-circle-right" style="font-size: 2rem;"></i>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="section-header">
-                <h3 class="section-title">Danh sách phòng</h3>
-                <button class="btn-filter"><i class="fas fa-filter mr-2"></i> Lọc trạng thái</button>
-            </div>
-
-            <div class="rooms-grid" id="rooms-container">
+            <!-- Danh sách phòng dạng grid với phân trang -->
+            <div class="rooms-section" style="position: relative;">
+                <div class="rooms-grid" id="rooms-container">
+                    <!-- Phòng sẽ được thêm vào đây -->
                 </div>
+                
+                <!-- Nút Thêm Phòng và mũi tên ở góc phải -->
+                <div style="position: absolute; top: 0; right: 0; display: flex; flex-direction: column; gap: 0.75rem; z-index: 10;">
+                    <!-- Nút Thêm Phòng -->
+                    
+                    <!-- Nút mũi tên chuyển trang -->
+                    <button id="rooms-next-btn" class="rooms-nav-btn-top" onclick="nextRoomsPage()" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); transition: all 0.2s;">
+                        <i class="fas fa-chevron-right" style="color: white; font-size: 1.25rem;"></i>
+                    </button>
+                    <button id="rooms-prev-btn" class="rooms-nav-btn-top" onclick="prevRoomsPage()" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); transition: all 0.2s;">
+                        <i class="fas fa-chevron-left" style="color: white; font-size: 1.25rem;"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -131,7 +189,7 @@
                     <div class="form-group">
                         <label class="form-label">Dịch vụ chung (Mặc định cho các phòng)</label>
                         <div id="service-list-house" class="service-list-container">
-                            </div>
+                        </div>
                         <button type="button" class="btn-add-service" onclick="addServiceRow('house')">
                             <i class="fas fa-plus"></i> Thêm dịch vụ
                         </button>
@@ -201,7 +259,7 @@
                 <div class="form-group">
                     <label class="form-label">Dịch vụ & Tiện ích (Kế thừa từ nhà + Riêng)</label>
                     <div id="service-list-room" class="service-list-container">
-                        </div>
+                    </div>
                     <button type="button" class="btn-add-service" onclick="addServiceRow('room')">
                         <i class="fas fa-plus"></i> Tạo thêm dịch vụ
                     </button>
@@ -215,8 +273,152 @@
         </div>
     </div>
 
-    <script src="property.js">
-        
-    </script>
+    <!-- Modal Chi tiết Nhà trọ -->
+    <div id="modal-house-detail" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title" id="modal-house-detail-title">Chi tiết Nhà trọ</h3>
+                    <p class="modal-desc" id="modal-house-detail-desc">Xem và chỉnh sửa thông tin nhà trọ</p>
+                </div>
+                <span class="close-btn" onclick="closeModal('modal-house-detail')"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="modal-body">
+                <form id="form-house-detail">
+                    <div class="form-group">
+                        <label class="form-label">Tên bất động sản <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-home input-icon"></i>
+                            <input type="text" id="inp-house-detail-name" class="form-input" placeholder="Ví dụ: Chung cư Sunrise City" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Địa chỉ</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                            <input type="text" id="inp-house-detail-addr" class="form-input" placeholder="Địa chỉ chi tiết" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Dịch vụ chung (Mặc định cho các phòng)</label>
+                        <div id="service-list-house-detail" class="service-list-container">
+                        </div>
+                        <button type="button" class="btn-add-service" id="btn-add-service-house-detail" onclick="addServiceRow('house-detail')" style="display: none;">
+                            <i class="fas fa-plus"></i> Thêm dịch vụ
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mô tả</label>
+                        <textarea id="inp-house-detail-desc" class="form-textarea" placeholder="Mô tả chung về khu trọ..." readonly></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-house-detail')">Đóng</button>
+                <button class="btn-secondary" id="btn-edit-house" onclick="toggleEditHouse()" style="display: inline-block;">
+                    <i class="fas fa-edit"></i> Chỉnh sửa
+                </button>
+                <button class="btn-submit" id="btn-save-house" onclick="saveHouseDetail()" style="display: none;">
+                    <i class="fas fa-save"></i> Lưu thay đổi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết Phòng -->
+    <div id="modal-room-detail" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title" id="modal-room-detail-title">Chi tiết Phòng</h3>
+                    <p class="modal-desc" id="modal-room-detail-desc">Xem và chỉnh sửa thông tin phòng</p>
+                </div>
+                <span class="close-btn" onclick="closeModal('modal-room-detail')"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="modal-body">
+                <!-- Phần khách thuê (nếu có) -->
+                <div id="tenant-section" class="tenant-section" style="display: none; margin-bottom: 1.5rem; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+                    <div style="margin-bottom: 0.75rem;">
+                        <h4 style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;"><i class="fas fa-user"></i> Khách thuê đang thuê</h4>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div id="tenant-avatar-large" class="tenant-avatar-large" style="width: 60px; height: 60px; border-radius: 50%; background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">AD</div>
+                        <div class="tenant-info-detail" style="flex: 1;">
+                            <p class="tenant-name-detail" id="tenant-name-detail" style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Tên khách thuê</p>
+                            <p class="tenant-phone-detail" id="tenant-phone-detail" style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">Số điện thoại</p>
+                            <p class="tenant-email-detail" id="tenant-email-detail" style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">Email</p>
+                            <p class="tenant-contract-detail" id="tenant-contract-detail" style="font-size: 0.75rem; color: #6b7280;">Hợp đồng: Từ ... đến ...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form thông tin phòng -->
+                <form id="form-room-detail">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Số phòng <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="far fa-building input-icon"></i>
+                                <input type="text" id="inp-room-detail-number" class="form-input" placeholder="Ví dụ: P101" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tầng</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-layer-group input-icon"></i>
+                                <input type="number" id="inp-room-detail-floor" class="form-input" placeholder="1" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Diện tích (m²)</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-ruler-combined input-icon"></i>
+                                <input type="number" id="inp-room-detail-area" class="form-input" placeholder="30" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Giá thuê (VNĐ) <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-dollar-sign input-icon"></i>
+                                <input type="text" id="inp-room-detail-rent" class="form-input" placeholder="5000000" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tiện nghi (Nội thất)</label>
+                        <textarea id="inp-room-detail-facilities" class="form-textarea" placeholder="Giường, Tủ, Điều hòa..." readonly></textarea>
+                    </div>
+                </form>
+
+                <div class="form-group">
+                    <label class="form-label">Dịch vụ & Tiện ích</label>
+                    <div id="service-list-room-detail" class="service-list-container">
+                    </div>
+                    <button type="button" class="btn-add-service" id="btn-add-service-detail" onclick="addServiceRow('room-detail')" style="display: none;">
+                        <i class="fas fa-plus"></i> Tạo thêm dịch vụ
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-room-detail')">Đóng</button>
+                <button class="btn-secondary" id="btn-edit-room" onclick="toggleEditRoom()" style="display: inline-block;">
+                    <i class="fas fa-edit"></i> Chỉnh sửa
+                </button>
+                <button class="btn-submit" id="btn-save-room" onclick="saveRoomDetail()" style="display: none;">
+                    <i class="fas fa-save"></i> Lưu thay đổi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/property.js"></script>
 </body>
 </html>

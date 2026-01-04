@@ -7,273 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        /* --- 1. GLOBAL & RESET --- */
-        :root {
-            --sidebar-bg: #111827;
-            --sidebar-active: #059669;
-            --bg-color: #f3f4f6;
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --white: #ffffff;
-            --blue-btn: #1d4ed8;
-            --blue-btn-hover: #1e40af;
-            --border-color: #e5e7eb;
-            --primary-blue: #137fec; /* Màu chủ đạo của form mới */
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
-
-        /* --- 2. SIDEBAR (Giữ nguyên) --- */
-        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #9ca3af; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
-        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; color: var(--white); }
-        .brand-icon { background-color: var(--white); color: var(--sidebar-bg); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .brand-text h2 { font-size: 18px; font-weight: 700; }
-        .brand-text span { font-size: 12px; color: #9ca3af; }
-        .user-profile { display: flex; align-items: center; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid #374151; margin-bottom: 20px; }
-        .avatar-small { width: 40px; height: 40px; background-color: #374151; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); }
-        .user-info h4 { color: var(--white); font-size: 14px; font-weight: 600; }
-        .user-info p { font-size: 12px; }
-        .nav-menu { list-style: none; flex: 1; }
-        .nav-item { margin-bottom: 8px; }
-        .nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; text-decoration: none; color: #d1d5db; font-size: 14px; transition: all 0.2s; }
-        .nav-link:hover { background-color: #1f2937; }
-        .nav-link.active { background-color: var(--sidebar-active); color: var(--white); }
-        .nav-link i { width: 20px; }
-        .sidebar-footer { margin-top: auto; border-top: 1px solid #374151; padding-top: 20px; }
-
-        /* --- 3. MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; height: 100vh; position: relative; }
-        
-        /* Header & Stats (Giữ nguyên) */
-        .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
-        .page-title h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-        .page-title p { color: var(--text-secondary); font-size: 14px; }
-        .header-actions { display: flex; gap: 12px; }
-        .btn { padding: 10px 16px; border-radius: 8px; border: none; font-weight: 500; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; transition: 0.2s; }
-        .btn-outline { background-color: var(--white); border: 1px solid var(--border-color); color: var(--text-primary); }
-        .btn-primary { background-color: var(--blue-btn); color: var(--white); }
-        .btn-primary:hover { background-color: var(--blue-btn-hover); }
-        .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 10px; }
-        .stat-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 5px; }
-        .stat-icon.green { background-color: #d1fae5; color: #059669; }
-        .stat-icon.red { background-color: #fee2e2; color: #dc2626; }
-        .stat-icon.gray { background-color: #f3f4f6; color: #6b7280; }
-        .stat-label { color: var(--text-secondary); font-size: 14px; }
-        .stat-value { font-size: 24px; font-weight: 700; }
-
-        /* --- 4. FILTER BAR & DROPDOWN (NEW) --- */
-        .filter-bar { display: flex; gap: 15px; margin-bottom: 25px; }
-        .search-input-wrapper { flex: 1; position: relative; }
-        .search-input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
-        .search-input { width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; font-size: 14px; }
-        
-        /* Dropdown Style */
-        .dropdown { position: relative; width: 200px; font-size: 14px; }
-        .dropdown-toggle {
-            width: 100%;
-            background: var(--white);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px 16px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-primary);
-        }
-        .dropdown-toggle:hover { border-color: #d1d5db; }
-        .dropdown-menu {
-            display: none; /* Hidden by default */
-            position: absolute;
-            top: 110%;
-            left: 0;
-            width: 100%;
-            background: var(--white);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            z-index: 50;
-            overflow: hidden;
-            padding: 4px 0;
-        }
-        .dropdown.open .dropdown-menu { display: block; } /* Class to show */
-        
-        .dropdown-item {
-            padding: 10px 16px;
-            cursor: pointer;
-            color: var(--text-primary);
-            transition: background 0.2s;
-        }
-        .dropdown-item:hover { background-color: #f3f4f6; }
-        .dropdown-item.active { background-color: #e5e7eb; font-weight: 500; }
-
-        /* --- 5. TENANT LIST (Giữ nguyên) --- */
-        .tenant-card { background: var(--white); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        .user-summary { display: flex; gap: 16px; }
-        .avatar-large { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
-        .bg-blue-light { background-color: #dbeafe; color: #1e40af; }
-        .bg-gray-light { background-color: #f3f4f6; color: #374151; }
-        .bg-green-light { background-color: #d1fae5; color: #065f46; }
-        .bg-yellow-light { background-color: #fef3c7; color: #92400e; }
-        .user-details h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
-        .badge { font-size: 12px; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
-        .badge-success { background-color: #d1fae5; color: #065f46; }
-        .badge-danger { background-color: #fee2e2; color: #991b1b; }
-        .badge-neutral { background-color: #f3f4f6; color: #374151; }
-        .check-icon { color: #10b981; font-size: 20px; }
-        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-        .info-item label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-        .info-item span { font-size: 14px; font-weight: 500; color: var(--text-primary); display: block; }
-        .info-item i { color: #9ca3af; margin-right: 5px; width: 14px; }
-        .rent-price { font-size: 16px !important; font-weight: 700 !important; color: #1e3a8a !important; }
-        .status-text { font-weight: 600 !important; }
-        .status-text.ok, .status-text.paid { color: #059669; }
-        .card-actions { display: flex; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 20px; }
-        .btn-sm { padding: 8px 14px; font-size: 13px; }
-        .btn-dark { background-color: #1e3a8a; color: white; }
-        .btn-light { background-color: #f3f4f6; color: #374151; }
-        .btn-light:hover { background-color: #e5e7eb; }
-
-        /* --- 6. MODAL (POPUP) STYLES (NEW - Based on user request) --- */
-        .modal-overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .modal-overlay.show { display: flex; }
-
-        .modal-container {
-            background-color: var(--white);
-            width: 100%;
-            max-width: 900px;
-            max-height: 90vh;
-            border-radius: 12px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 { font-size: 20px; font-weight: 700; color: #111418; }
-        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #9ca3af; padding: 5px; border-radius: 50%; }
-        .close-btn:hover { background-color: #f3f4f6; color: #4b5563; }
-
-        .modal-body { padding: 24px 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
-
-        /* Form Sections */
-        .form-section-title { font-size: 18px; font-weight: 700; color: #111418; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .form-section-title i { color: var(--primary-blue); }
-
-        .form-row { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 15px; }
-        @media (min-width: 768px) { .form-row { grid-template-columns: 1fr 1fr; } }
-
-        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-        .form-label { font-size: 15px; font-weight: 500; color: #111418; }
-        .text-red { color: #ef4444; }
-        
-        .form-control {
-            width: 100%;
-            height: 48px;
-            padding: 0 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--white);
-            color: #111418;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .form-control:focus { border-color: var(--primary-blue); ring: 1px solid var(--primary-blue); }
-
-        .form-control-icon-wrapper { position: relative; }
-        .form-control.has-icon { padding-left: 40px; }
-        .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #6b7280; font-size: 18px; pointer-events: none; }
-
-        .helper-text { font-size: 12px; color: var(--primary-blue); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
-
-        /* File Upload Area */
-        .upload-area {
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            height: 160px;
-            background-color: #f9fafb;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .upload-area:hover { background-color: #eff6ff; border-color: var(--primary-blue); }
-        .upload-area i { font-size: 32px; color: #9ca3af; margin-bottom: 8px; }
-        .upload-area:hover i { color: var(--primary-blue); }
-        .upload-text { font-size: 14px; font-weight: 700; color: var(--primary-blue); }
-        .upload-sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
-
-        /* PDF Upload */
-        .file-select-box {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 16px; border: 1px solid var(--border-color);
-            border-radius: 8px; cursor: pointer; background: var(--white);
-        }
-        .file-select-box:hover { background-color: #f9fafb; }
-        .file-info { display: flex; align-items: center; gap: 12px; }
-        .file-icon { width: 48px; height: 48px; background-color: #fef2f2; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 24px; }
-        .file-btn { padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; font-weight: 600; background: white; }
-
-        .divider { height: 1px; background-color: var(--border-color); width: 100%; margin: 10px 0; }
-
-        .modal-footer {
-            padding: 20px 24px;
-            border-top: 1px solid var(--border-color);
-            background-color: #f9fafb;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .btn-cancel { padding: 12px 24px; border: 1px solid var(--border-color); background: var(--white); border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-submit { padding: 12px 24px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .btn-submit:hover { background-color: #1d4ed8; }
-
-    </style>
+    <link rel="stylesheet" href="css/contract.css">
 </head>
 <body>
 
@@ -288,11 +22,11 @@
             <i class="fa-regular fa-bell" style="margin-left: auto; color: #9ca3af;"></i>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-chart-column"></i>Tổng quan</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-building"></i>Bất động sản</a></li>
-            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa-solid fa-users"></i>Người thuê</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-dollar-sign"></i>Hóa đơn</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-wrench"></i>Bảo trì</a></li>
+            <li class="nav-item"><a href="trangchu.html" class="nav-link"><i class="fa-solid fa-chart-column"></i>Tổng quan</a></li>
+            <li class="nav-item"><a href="property.html" class="nav-link"><i class="fa-solid fa-building"></i>Bất động sản</a></li>
+            <li class="nav-item"><a href="contract.html" class="nav-link active"><i class="fa-solid fa-users"></i>Người thuê</a></li>
+            <li class="nav-item"><a href="invoices.html" class="nav-link"><i class="fa-solid fa-dollar-sign"></i>Hóa đơn</a></li>
+            <li class="nav-item"><a href="maintenance.html" class="nav-link"><i class="fa-solid fa-wrench"></i>Bảo trì</a></li>
         </ul>
         <div class="sidebar-footer">
             <ul class="nav-menu">
@@ -309,7 +43,6 @@
                 <p>Quản lý hồ sơ và hợp đồng thuê</p>
             </div>
             <div class="header-actions">
-                <button class="btn btn-outline"><i class="fa-solid fa-download"></i> Xuất báo cáo</button>
                 <button class="btn btn-primary" onclick="toggleModal()"><i class="fa-solid fa-plus"></i> Tạo hợp đồng mới</button>
             </div>
         </header>
@@ -317,15 +50,18 @@
         <section class="stats-container">
             <div class="stat-card">
                 <div class="stat-icon green"><i class="fa-regular fa-user"></i></div>
-                <span class="stat-label">Đang thuê</span><span class="stat-value">47</span>
+                <span class="stat-label">Đang thuê</span>
+                <span class="stat-value" id="stat-active">...</span>
             </div>
             <div class="stat-card">
                 <div class="stat-icon red"><i class="fa-regular fa-circle-xmark"></i></div>
-                <span class="stat-label">Chấm dứt hợp đồng</span><span class="stat-value">12</span>
+                <span class="stat-label">Chấm dứt hợp đồng</span>
+                <span class="stat-value" id="stat-terminated">...</span>
             </div>
             <div class="stat-card">
-                <div class="stat-icon gray"><i class="fa-regular fa-user"></i></div>
-                <span class="stat-label">Chưa thuê</span><span class="stat-value">5</span>
+                <div class="stat-icon gray"><i class="fa-regular fa-clock"></i></div>
+                <span class="stat-label">Hết hạn</span>
+                <span class="stat-value" id="stat-expired">...</span>
             </div>
         </section>
 
@@ -356,9 +92,6 @@
                         <div class="avatar-large bg-blue-light">TM</div>
                         <div class="user-details">
                             <h3>Nguyễn Thị Mai <span class="badge badge-success">Đang thuê</span></h3>
-                            <div class="info-grid" style="grid-template-columns: 1fr; margin-bottom: 0;">
-                                <div class="info-item"><label>Mã KH:</label><span>T-0204B</span></div>
-                            </div>
                         </div>
                     </div>
                     <i class="fa-regular fa-circle-check check-icon"></i>
@@ -396,11 +129,8 @@
                     <h3 class="form-section-title"><i class="fa-solid fa-building"></i> Thông tin phòng</h3>
                     <div class="form-group">
                         <label class="form-label">Chọn phòng / Căn hộ <span class="text-red">*</span></label>
-                        <select class="form-control">
-                            <option disabled selected>Chọn phòng từ danh sách...</option>
-                            <option value="1">P.101 - Building A (Trống - 5.500.000 đ)</option>
-                            <option value="2">P.205 - Sunrise City (Đang bảo trì)</option>
-                            <option value="3">V.302 - Villa Compound (Trống - 12.000.000 đ)</option>
+                        <select class="form-control" id="select-room-id">
+                            <option disabled selected value="">Đang tải danh sách phòng...</option>
                         </select>
                     </div>
                 </div>
@@ -410,11 +140,25 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Họ và tên <span class="text-red">*</span></label>
-                            <input type="text" class="form-control" placeholder="Nhập họ và tên người thuê">
+                            <input type="text" id="inp-fullname" class="form-control" placeholder="Nhập họ và tên người thuê">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Số điện thoại <span class="text-red">*</span></label>
-                            <input type="tel" class="form-control" placeholder="Nhập số điện thoại">
+                            <input type="tel" id="inp-phone" class="form-control" placeholder="Nhập số điện thoại">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số CCCD/CMND <span class="text-red">*</span></label>
+                            <input type="text" id="inp-id-card" class="form-control" placeholder="Nhập số CCCD/CMND">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Mật khẩu đăng nhập</label>
+                            <div class="form-control-icon-wrapper">
+                                <i class="fa-solid fa-key input-icon"></i>
+                                <input type="text" id="inp-password" class="form-control has-icon" placeholder="Nhập mật khẩu mới">
+                            </div>
+                            <p style="font-size: 11px; color: #6b7280; margin-top: 4px;">* Thay đổi giá trị này sẽ cập nhật mật khẩu đăng nhập của khách.</p>
                         </div>
                     </div>
                     
@@ -423,22 +167,35 @@
                         <p style="font-size: 13px; color: #6b7280; margin-bottom: 10px;">Tải lên ảnh mặt trước và mặt sau của giấy tờ tùy thân.</p>
                         
                         <div class="form-row">
-                            <div class="form-group">
-                                <span style="font-size: 13px; font-weight: 500; margin-bottom: 5px; display:block;">Mặt trước</span>
-                                <div class="upload-area">
-                                    <i class="fa-solid fa-id-card"></i>
-                                    <span class="upload-text">Tải ảnh lên</span>
-                                    <span class="upload-sub">PNG, JPG tối đa 5MB</span>
-                                    <input type="file" style="position: absolute; opacity: 0; inset: 0; cursor: pointer;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <span style="font-size: 13px; font-weight: 500; margin-bottom: 5px;">Mặt trước</span>
+                                    <div class="upload-area">
+                                        <div class="upload-default" id="default-front">
+                                            <i class="fa-solid fa-id-card" style="font-size: 32px; color: #9ca3af; margin-bottom: 8px;"></i>
+                                            <span class="upload-text">Tải ảnh lên</span>
+                                        </div>
+                                        
+                                        <img src="" id="preview-front" class="preview-img" alt="Mặt trước">
+                            
+                                        <input type="file" id="file-cccd-front" class="file-input-hidden" accept="image/*"
+                                               onchange="previewImage(this, 'preview-front', 'default-front')">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <span style="font-size: 13px; font-weight: 500; margin-bottom: 5px; display:block;">Mặt sau</span>
-                                <div class="upload-area">
-                                    <i class="fa-solid fa-address-card"></i>
-                                    <span class="upload-text">Tải ảnh lên</span>
-                                    <span class="upload-sub">PNG, JPG tối đa 5MB</span>
-                                    <input type="file" style="position: absolute; opacity: 0; inset: 0; cursor: pointer;">
+                            
+                                <div class="form-group">
+                                    <span style="font-size: 13px; font-weight: 500; margin-bottom: 5px;">Mặt sau</span>
+                                    <div class="upload-area">
+                                        <div class="upload-default" id="default-back">
+                                            <i class="fa-solid fa-address-card" style="font-size: 32px; color: #9ca3af; margin-bottom: 8px;"></i>
+                                            <span class="upload-text">Tải ảnh lên</span>
+                                        </div>
+                            
+                                        <img src="" id="preview-back" class="preview-img" alt="Mặt sau">
+                            
+                                        <input type="file" id="file-cccd-back" class="file-input-hidden" accept="image/*"
+                                               onchange="previewImage(this, 'preview-back', 'default-back')">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -452,11 +209,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Ngày bắt đầu</label>
-                            <input type="date" class="form-control">
+                            <input type="date" id="inp-start-date" class="form-control">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Ngày kết thúc</label>
-                            <input type="date" class="form-control">
+                            <input type="date" id="inp-end-date" class="form-control">
                         </div>
                     </div>
                     <div class="form-row">
@@ -464,16 +221,15 @@
                             <label class="form-label">Tiền cọc (VND)</label>
                             <div class="form-control-icon-wrapper">
                                 <i class="fa-solid fa-dollar-sign input-icon"></i>
-                                <input type="text" class="form-control has-icon" placeholder="0">
+                                <input type="text" id="inp-deposit" class="form-control has-icon" placeholder="0">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Tiền thuê phòng (VND)</label>
                             <div class="form-control-icon-wrapper">
                                 <i class="fa-solid fa-money-bill input-icon"></i>
-                                <input type="text" class="form-control has-icon" value="5.500.000" style="background-color: #f9fafb;">
+                                <input type="text" id="inp-rent" class="form-control has-icon" value="5.500.000">
                             </div>
-                            <span class="helper-text"><i class="fa-solid fa-circle-info"></i> Tự động điền từ giá phòng hiện tại</span>
                         </div>
                     </div>
                 </div>
@@ -493,50 +249,39 @@
                                 </div>
                             </div>
                             <span class="file-btn">Chọn file</span>
-                            <input type="file" style="display: none;" accept="application/pdf">
+                            <input type="file" id="file-contract-pdf" style="display: none;" accept="application/pdf" onchange="document.getElementById('pdf-name-display').innerText = this.files[0].name">
                         </label>
+                        <small id="pdf-name-display" style="color: blue;"></small>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ghi chú thêm</label>
-                        <textarea class="form-control" style="height: 100px; padding-top: 10px; resize: vertical;" placeholder="Nhập các điều khoản bổ sung hoặc ghi chú về người thuê..."></textarea>
+                        <textarea id="inp-notes" class="form-control" style="height: 100px; padding-top: 10px; resize: vertical;"></textarea>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="toggleModal()">Hủy</button>
-                <button class="btn-submit"><i class="fa-solid fa-circle-plus"></i> Tạo hợp đồng</button>
+                
+                <button id="btn-create" class="btn-submit" onclick="submitCreateContract()">
+                    <i class="fa-solid fa-circle-plus"></i> Tạo hợp đồng
+                </button>
+                
+                <div id="action-buttons-edit" style="display: none; gap: 10px;">
+                    <button class="btn-cancel" style="border-color: #ef4444; color: #ef4444;" onclick="terminateContract()">
+                        <i class="fa-solid fa-ban"></i> Chấm dứt HĐ
+                    </button>
+                    <button id="btn-edit" class="btn-submit" onclick="enableEditMode()">
+                        <i class="fa-solid fa-pen-to-square"></i> Cập nhật
+                    </button>
+                    <button id="btn-save" class="btn-submit" style="display: none;" onclick="saveContractChanges()">
+                        <i class="fa-solid fa-floppy-disk"></i> Lưu
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Toggle Dropdown
-        function toggleDropdown() {
-            const dropdown = document.getElementById('statusDropdown');
-            dropdown.classList.toggle('open');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('statusDropdown');
-            if (!dropdown.contains(event.target)) {
-                dropdown.classList.remove('open');
-            }
-        });
-
-        // Toggle Modal
-        function toggleModal() {
-            const modal = document.getElementById('contractModal');
-            modal.classList.toggle('show');
-            
-            // Prevent body scroll when modal is open
-            if (modal.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = 'hidden'; // Keep body hidden because main-content scrolls
-            }
-        }
-    </script>
+    <script src="js/contract.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 # Node
 node_modules/
 
+uploads/
 # Environment
 .env
 
@@ -17,3 +18,4 @@ Thumbs.db
 database/*.db
 database/*.sqlite
 database/data.sql
+database/

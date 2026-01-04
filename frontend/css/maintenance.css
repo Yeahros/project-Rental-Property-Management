@@ -1,0 +1,175 @@
+* { box-sizing: border-box; }
+body { 
+    font-family: 'Be Vietnam Pro', sans-serif; 
+    background-color: #F8F9FA;
+    color: #1f2937;
+    transition: background-color 0.2s, color 0.2s;
+}
+body.dark { 
+    background-color: #111827; 
+    color: #e5e7eb;
+}
+
+/* Layout */
+.main-container { 
+    display: flex; 
+    height: 100vh; 
+    overflow: hidden; 
+}
+.main-content { 
+    flex: 1; 
+    overflow-y: auto; 
+    position: relative; 
+    scroll-behavior: smooth; 
+}
+.content-wrapper { 
+    padding: 2rem; 
+    max-width: 80rem; 
+    margin: 0 auto; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 2rem; 
+}
+
+/* Sidebar */
+.sidebar { 
+    width: 16rem; 
+    background-color: #1a237e; 
+    display: flex; 
+    flex-direction: column; 
+    color: white; 
+    transition: background-color 0.2s; 
+    flex-shrink: 0; 
+}
+body.dark .sidebar { 
+    background-color: #0f172a; 
+}
+.sidebar-header { 
+    height: 5rem; 
+    display: flex; 
+    align-items: center; 
+    padding: 0 1.5rem; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+.logo-icon { 
+    width: 2.5rem; 
+    height: 2.5rem; 
+    background-color: white; 
+    color: #1a237e; 
+    border-radius: 0.75rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-right: 0.75rem; 
+}
+.logo-text h1 { 
+    font-weight: 700; 
+    font-size: 1.125rem; 
+    line-height: 1.25; 
+}
+.logo-text p { 
+    font-size: 0.75rem; 
+    color: #d1d5db; 
+}
+.user-section { 
+    padding: 1.5rem; 
+    display: flex; 
+    align-items: center; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    margin-bottom: 0.5rem; 
+}
+.user-avatar { 
+    width: 2.5rem; 
+    height: 2.5rem; 
+    border-radius: 50%; 
+    background-color: #2563eb; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 0.875rem; 
+    font-weight: 600; 
+    margin-right: 0.75rem; 
+}
+.user-info { 
+    flex: 1; 
+    min-width: 0; 
+}
+.user-info p:first-child { 
+    font-size: 0.875rem; 
+    font-weight: 500; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+}
+.user-info p:last-child { 
+    font-size: 0.75rem; 
+    color: #9ca3af; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+}
+.notif-btn { 
+    color: #9ca3af; 
+    transition: color 0.2s; 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+}
+.notif-btn:hover { 
+    color: white; 
+}
+.nav-menu { 
+    flex: 1; 
+    padding: 0 1rem; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.5rem; 
+    overflow-y: auto; 
+}
+.nav-link { 
+    display: flex; 
+    align-items: center; 
+    padding: 0.75rem 1rem; 
+    color: #d1d5db; 
+    border-radius: 0.75rem; 
+    transition: all 0.2s; 
+    text-decoration: none; 
+}
+.nav-link:hover { 
+    background-color: rgba(255, 255, 255, 0.1); 
+    color: white; 
+}
+.nav-link.active { 
+    background-color: #009688; 
+    color: white; 
+    box-shadow: 0 10px 15px -3px rgba(0, 150, 136, 0.3), 0 4px 6px -2px rgba(0, 150, 136, 0.3); 
+}
+.nav-icon { 
+    margin-right: 0.75rem; 
+    font-size: 1.25rem; 
+}
+.sidebar-footer { 
+    padding: 1rem; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.5rem; 
+    border-top: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background-color: #374151;
+}
+.material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Yêu cầu Bảo trì</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              "background-light": "#F8F9FA",
+              "background-dark": "#111827",
+              "sidebar-bg": "#1e3a8a",
+              "sidebar-bg-dark": "#0f172a",
+              status: {
+                  red: "#EF4444",
+                  yellow: "#F59E0B",
+                  green: "#10B981",
+                  gray: "#9CA3AF"
+              }
+            },
+            fontFamily: {
+              display: ["'Be Vietnam Pro'", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              'xl': "0.75rem",
+              '2xl': "1rem",
+            },
+            boxShadow: {
+                'card': '0 2px 5px -1px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.05)',
+            }
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="css/maintenance.css"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-display antialiased min-h-screen">
+<div class="main-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">
+                <span class="material-icons-outlined">home</span>
+            </div>
+            <div class="logo-text">
+                <h1>TroViet</h1>
+                <p>Công Chủ nhà</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="user-avatar">
+                <span class="material-icons-outlined">person</span>
+            </div>
+            <div class="user-info">
+                <p>Admin</p>
+                <p>admin@troviet.com</p>
+            </div>
+            <button class="notif-btn">
+                <span class="material-icons-outlined">notifications</span>
+            </button>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-link" href="trangchu.html">
+                <span class="material-icons-outlined nav-icon">bar_chart</span>
+                <span>Tổng quan</span>
+            </a>
+            <a class="nav-link" href="property.html">
+                <span class="material-icons-outlined nav-icon">apartment</span>
+                <span>Bất động sản</span>
+            </a>
+            <a class="nav-link" href="contract.html">
+                <span class="material-icons-outlined nav-icon">people_outline</span>
+                <span>Người thuê</span>
+            </a>
+            <a class="nav-link" href="invoices.html">
+                <span class="material-icons-outlined nav-icon">attach_money</span>
+                <span>Hóa đơn</span>
+            </a>
+            <a class="nav-link active" href="maintenance.html">
+                <span class="material-icons-outlined nav-icon">build</span>
+                <span>Bảo trì</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a class="nav-link" href="#">
+                <span class="material-icons-outlined nav-icon">settings</span>
+                <span>Cài đặt</span>
+            </a>
+            <a class="nav-link" href="#">
+                <span class="material-icons-outlined nav-icon">logout</span>
+                <span>Đăng xuất</span>
+            </a>
+        </div>
+    </aside>
+    
+    <main class="main-content">
+        <div class="content-wrapper">
+            <header>
+                <h1 class="text-3xl font-bold text-primary dark:text-blue-400 mb-1">Yêu cầu Bảo trì</h1>
+                <p class="text-slate-500 dark:text-slate-400">Quản lý tất cả yêu cầu bảo trì</p>
+            </header>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-card border border-slate-100 dark:border-gray-700">
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 dark:text-red-400 mb-3">
+                            <span class="material-symbols-rounded text-xl">error</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Yêu cầu Mới</p>
+                            <p class="text-3xl font-semibold text-red-500 dark:text-red-400">8</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-card border border-slate-100 dark:border-gray-700">
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-yellow-900/20 flex items-center justify-center text-yellow-500 dark:text-yellow-400 mb-3">
+                            <span class="material-symbols-rounded text-xl">schedule</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Đang xử lý</p>
+                            <p class="text-3xl font-semibold text-yellow-500 dark:text-yellow-400">5</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-card border border-slate-100 dark:border-gray-700">
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-500 dark:text-green-400 mb-3">
+                            <span class="material-symbols-rounded text-xl">check_circle</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Hoàn thành</p>
+                            <p class="text-3xl font-semibold text-green-500 dark:text-green-400">42</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-card border border-slate-100 dark:border-gray-700">
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 mb-3">
+                            <span class="material-symbols-rounded text-xl">cancel</span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Đã hủy</p>
+                            <p class="text-3xl font-semibold text-gray-600 dark:text-gray-300">3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-gray-700 flex flex-col md:flex-row gap-4">
+                <div class="relative flex-grow">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="material-symbols-rounded text-slate-400">search</span>
+                    </span>
+                    <input class="w-full pl-10 pr-4 py-2 rounded-lg border-slate-200 dark:border-gray-600 bg-transparent text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow" placeholder="Tìm kiếm yêu cầu..." type="text"/>
+                </div>
+                <div class="w-full md:w-48 h-10 rounded-lg border border-slate-200 dark:border-gray-600 bg-transparent"></div>
+                <div class="w-full md:w-48 h-10 rounded-lg border border-slate-200 dark:border-gray-600 bg-transparent"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card border border-slate-100 dark:border-gray-700 overflow-hidden flex flex-col md:flex-row">
+                    <div class="h-2 md:h-auto md:w-2 bg-red-500 shrink-0"></div>
+                    <div class="p-6 flex-grow">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 shrink-0">
+                                <span class="material-symbols-rounded">error</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <h3 class="text-lg font-semibold text-slate-800 dark:text-white">Rò rỉ Nước</h3>
+                                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-200">Mới</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Đã gửi 3 giờ trước • Yêu cầu #1247</p>
+                                <p class="text-slate-700 dark:text-slate-300 mb-6">Bồn rửa bếp bị rò rỉ nặng. Nước tràn ra sàn. Cần xử lý ngay lập tức.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">location_on</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Vị trí</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Phòng 305A - Sunrise Heights</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">person</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Người thuê</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Mike Chen</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">calendar_today</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Danh mục</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Hệ thống nước</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-3">
+                                    <button class="bg-primary hover:bg-blue-800 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        Tiếp nhận xử lý
+                                    </button>
+                                    <button class="bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-slate-200 px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+                                        Hủy yêu cầu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card border border-slate-100 dark:border-gray-700 overflow-hidden flex flex-col md:flex-row">
+                    <div class="h-2 md:h-auto md:w-2 bg-yellow-400 shrink-0"></div>
+                    <div class="p-6 flex-grow">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-yellow-50 dark:bg-yellow-900/20 flex items-center justify-center text-yellow-500 shrink-0">
+                                <span class="material-symbols-rounded">schedule</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <h3 class="text-lg font-semibold text-slate-800 dark:text-white">Điều hòa Không Mát</h3>
+                                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200">Đang xử lý</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Đã gửi 2 ngày trước • Yêu cầu #1245</p>
+                                <p class="text-slate-700 dark:text-slate-300 mb-6">Điều hòa không làm mát đúng cách. Nhiệt độ phòng ở 80°F mặc dù điều hòa đang chạy.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">location_on</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Vị trí</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Phòng 204B - Sunrise Heights</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">person</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Người thuê</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Emma Wilson</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">calendar_today</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Danh mục</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">HVAC</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    Đánh dấu Hoàn thành
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card border border-slate-100 dark:border-gray-700 overflow-hidden flex flex-col md:flex-row">
+                    <div class="h-2 md:h-auto md:w-2 bg-green-500 shrink-0"></div>
+                    <div class="p-6 flex-grow">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-500 shrink-0">
+                                <span class="material-symbols-rounded">check_circle</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <h3 class="text-lg font-semibold text-slate-800 dark:text-white">Vòi Nước Rò Rỉ</h3>
+                                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200">Hoàn thành</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Đã giải quyết 1 tuần trước • Yêu cầu #1238</p>
+                                <p class="text-slate-700 dark:text-slate-300 mb-6">Vòi nước phòng tắm nhỏ giọt liên tục suốt ngày đêm.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">location_on</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Vị trí</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Phòng 204B - Sunrise Heights</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">person</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Người thuê</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Emma Wilson</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">calendar_today</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Danh mục</p>
+                                            <p class="text-sm font-medium text-primary dark:text-blue-400">Hệ thống nước</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-lg p-3 text-sm text-green-800 dark:text-green-200">
+                                    <span class="font-semibold">Giải pháp:</span> Đã sửa. Thay vòng đệm bị mòn và siết chặt tất cả các kết nối.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card border border-slate-100 dark:border-gray-700 overflow-hidden flex flex-col md:flex-row">
+                    <div class="h-2 md:h-auto md:w-2 bg-slate-400 shrink-0"></div>
+                    <div class="p-6 flex-grow">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 shrink-0">
+                                <span class="material-symbols-rounded">cancel</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <h3 class="text-lg font-semibold text-slate-800 dark:text-white">Thay Bóng Đèn Hành Lang</h3>
+                                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300">Hủy</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Đã hủy 2 ngày trước • Yêu cầu #1250</p>
+                                <p class="text-slate-700 dark:text-slate-300 mb-6">Yêu cầu thay bóng đèn ở hành lang tầng 3.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">location_on</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Vị trí</p>
+                                            <p class="text-sm font-medium text-slate-600 dark:text-slate-300">Hành lang Tầng 3</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-rounded text-slate-400 text-lg">person</span>
+                                        <div>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400">Người thuê</p>
+                                            <p class="text-sm font-medium text-slate-600 dark:text-slate-300">Nguyễn Văn A</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg p-3 text-sm text-slate-700 dark:text-slate-300">
+                                    <span class="font-semibold">Lý do hủy:</span> Người thuê báo lại là bóng đèn đã tự sáng lại, có thể do lỏng đuôi đèn.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="js/maintenance.js"></script>
+
+</body>
+</html>
+
