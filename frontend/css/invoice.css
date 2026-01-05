@@ -15,14 +15,29 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Manrope', sans-serif; background-color: var(--bg-light); color: var(--text-dark); height: 100vh; overflow: hidden; }
+/* Body styles đã được định nghĩa trong trangchu.css */
 
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-.material-symbols-outlined { font-size: 20px; vertical-align: middle; }
+.material-symbols-outlined { 
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    vertical-align: middle;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
 
 /* 2. LAYOUT UTILITIES */
 .app-container { display: flex; height: 100vh; width: 100%; }
@@ -41,28 +56,10 @@ body { font-family: 'Manrope', sans-serif; background-color: var(--bg-light); co
 .font-bold { font-weight: 700; }
 
 /* 3. SIDEBAR STYLES */
-.sidebar {
-    width: 260px;
-    background-color: var(--sidebar-bg);
-    color: var(--white);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    flex-shrink: 0;
-    transition: all 0.3s;
-}
-.sidebar-header { padding: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-.logo-box { width: 40px; height: 40px; background: white; color: var(--sidebar-bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-.sidebar-user { margin: 0 1rem 1.5rem; padding: 0.75rem; background-color: var(--sidebar-item-active); border-radius: 12px; border: 1px solid #3b57a5; display: flex; align-items: center; justify-content: space-between; }
-.user-avatar { width: 32px; height: 32px; background-color: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
-.nav-list { flex: 1; overflow-y: auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
-.nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; color: #bfdbfe; text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: background 0.2s; }
-.nav-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
-.nav-item.active { background-color: #0d9488; color: white; box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.2); }
-.sidebar-footer { padding: 1rem; margin-top: auto; }
+/* Sidebar styles đã được định nghĩa trong trangchu.css */
 
 /* 4. MAIN CONTENT */
-.main-content { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; }
+/* Main content styles đã được định nghĩa trong trangchu.css */
 .content-scroll { flex: 1; overflow-y: auto; padding: 2rem; }
 .page-container { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
 
@@ -125,9 +122,87 @@ body { font-family: 'Manrope', sans-serif; background-color: var(--bg-light); co
 
 .form-group { margin-bottom: 1rem; }
 .form-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.375rem; color: #374151; }
-.form-input { display: block; width: 100%; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; outline: none; }
-.form-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 1px var(--primary-color); }
-.form-select { appearance: none; background-image: url("data:image/svg+xml,..."); } /* Simplification */
+.form-input,
+input.form-input,
+input[type="text"].form-input,
+input[type="number"].form-input,
+input[type="date"].form-input,
+select.form-input,
+select.form-select {
+    display: block !important;
+    width: 100% !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    background: white !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.form-input:focus,
+input.form-input:focus,
+input[type="text"].form-input:focus,
+input[type="number"].form-input:focus,
+input[type="date"].form-input:focus,
+select.form-input:focus,
+select.form-select:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+.form-input::placeholder,
+input.form-input::placeholder,
+input[type="text"].form-input::placeholder,
+input[type="number"].form-input::placeholder {
+    color: #9ca3af !important;
+    opacity: 1;
+}
+.form-select,
+select.form-select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    padding-right: 2.5rem !important;
+    cursor: pointer !important;
+}
+
+/* Textarea styling */
+textarea,
+textarea.form-input,
+textarea.form-textarea {
+    width: 100% !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    padding: 0.75rem !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    background: white !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s !important;
+    resize: vertical !important;
+    min-height: 80px !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+textarea:focus,
+textarea.form-input:focus,
+textarea.form-textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+textarea::placeholder,
+textarea.form-input::placeholder,
+textarea.form-textarea::placeholder {
+    color: #9ca3af !important;
+    opacity: 1;
+}
 
 /* Tab Switcher in Modal */
 .tab-group { background: #f3f4f6; padding: 0.25rem; border-radius: 0.5rem; display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
@@ -140,11 +215,42 @@ body { font-family: 'Manrope', sans-serif; background-color: var(--bg-light); co
 .fee-box { border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; margin-bottom: 0.75rem; background: #fff; }
 .fee-box.electric { background: rgba(254, 252, 232, 0.3); border-color: #fef08a; }
 .fee-box.water { background: rgba(239, 246, 255, 0.3); border-color: #bfdbfe; }
-.meter-input-group { display: flex; border: 1px solid #d1d5db; border-radius: 0.5rem; overflow: hidden; margin-top: 0.5rem; background: white; }
+.meter-input-group { 
+    display: flex !important; 
+    border: 1px solid #d1d5db !important; 
+    border-radius: 8px !important; 
+    overflow: hidden !important; 
+    margin-top: 0.5rem !important; 
+    background: white !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
 .meter-col { flex: 1; padding: 0.5rem; }
 .meter-col.border-r { border-right: 1px solid #d1d5db; }
 .meter-label { font-size: 0.65rem; color: #6b7280; text-transform: uppercase; font-weight: 700; display: block; }
-.meter-input { width: 100%; border: none; font-weight: 700; font-size: 0.875rem; outline: none; }
+.meter-input,
+input.meter-input,
+input[type="number"].meter-input {
+    width: 100% !important;
+    border: none !important;
+    font-weight: 700 !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    background: transparent !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.meter-input:focus,
+input.meter-input:focus,
+input[type="number"].meter-input:focus {
+    outline: none !important;
+}
+.meter-input::placeholder,
+input.meter-input::placeholder,
+input[type="number"].meter-input::placeholder {
+    color: #9ca3af !important;
+    opacity: 1;
+}
 .meter-result { background: #f9fafb; padding: 0.5rem 0.75rem; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; min-width: 80px; }
 
 .modal-footer { padding: 1rem 1.5rem; background: white; border-top: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; }

@@ -1,51 +1,104 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Nhà Trọ - TroViet</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/property.css">
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản lý Nhà Trọ - TroViet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#009688",
+                        "background-light": "#f3f4f6",
+                        "background-dark": "#111827",
+                        "sidebar-bg": "#1e3a8a",
+                        "sidebar-bg-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': "0.75rem",
+                        '2xl': "1rem",
+                        '3xl': "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<link rel="stylesheet" href="css/trangchu.css"/>
+<link rel="stylesheet" href="css/property.css">
 </head>
 <body>
-
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-box"><i class="fas fa-home"></i></div>
-            <div class="brand-name">
-                <h1>TroViet</h1>
-                <p>Cổng Chủ nhà</p>
-            </div>
-        </div>
-        <div class="user-profile">
-            <div class="avatar">AD</div>
-            <div class="user-info">
-                <p class="name">Admin Demo</p>
-                <p class="email">admin@troviet.com</p>
-            </div>
-            <i class="fas fa-bell notification-icon"></i>
-        </div>
-        <nav class="menu">
-            <ul>
-                <li><a href="#" class="menu-item"><i class="fas fa-chart-pie"></i><span>Tổng quan</span></a></li>
-                <li><a href="#" class="menu-item active"><i class="fas fa-building"></i><span>Nhà trọ</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-users"></i><span>Người thuê</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-dollar-sign"></i><span>Hóa đơn</span></a></li>
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <a href="#" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        <header class="top-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+<div class="main-container">
+<aside class="sidebar">
+<div class="sidebar-header">
+<div class="logo-icon">
+<span class="material-icons-outlined">home</span>
+</div>
+<div class="logo-text">
+<h1>TroViet</h1>
+<p>Công Chủ nhà</p>
+</div>
+</div>
+<div class="user-section">
+<div class="user-avatar">
+<span class="material-icons-outlined">person</span>
+</div>
+<div class="user-info">
+<p>Admin</p>
+<p>admin@troviet.com</p>
+</div>
+<button class="notif-btn">
+<span class="material-icons-outlined">notifications</span>
+</button>
+</div>
+<nav class="nav-menu">
+<a class="nav-link" href="trangchu.html">
+<span class="material-icons-outlined nav-icon">bar_chart</span>
+<span>Tổng quan</span>
+</a>
+<a class="nav-link active" href="property.html">
+<span class="material-icons-outlined nav-icon">apartment</span>
+<span>Bất động sản</span>
+</a>
+<a class="nav-link" href="contract.html">
+<span class="material-icons-outlined nav-icon">people_outline</span>
+<span>Người thuê</span>
+</a>
+<a class="nav-link" href="invoices.html">
+<span class="material-icons-outlined nav-icon">attach_money</span>
+<span>Hóa đơn</span>
+</a>
+<a class="nav-link" href="maintenance.html">
+<span class="material-icons-outlined nav-icon">build</span>
+<span>Bảo trì</span>
+</a>
+</nav>
+<div class="sidebar-footer">
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">settings</span>
+<span>Cài đặt</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">logout</span>
+<span>Đăng xuất</span>
+</a>
+</div>
+</aside>
+<main class="main-content bg-background-light dark:bg-background-dark p-6 md:p-10 transition-colors duration-200">
+        <header class="top-header">
             <div class="page-title">
-                <h2 style="font-size: 1.875rem; font-weight: 700; color: #1D4ED8; margin: 0 0 0.25rem 0;">Bất động sản</h2>
-                <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Quản lý danh sách nhà trọ và phòng</p>
+                <h2>Bất động sản</h2>
+                <p>Quản lý danh sách nhà trọ và phòng</p>
             </div>
-            <button class="btn-primary" onclick="openModal('modal-house')" style="background: #1D4ED8; color: white; border: none; border-radius: 0.5rem; padding: 0.625rem 1.25rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500;">
+            <button class="btn-primary" onclick="openModal('modal-house')">
                 <i class="fas fa-home"></i>
                 <i class="fas fa-plus" style="font-size: 0.75rem;"></i>
                 <span>Thêm Nhà trọ</span>
@@ -77,8 +130,17 @@
                 </div>
             </div>
 
-            <!-- Danh sách nhà trọ với nhà trọ được chọn ở đầu -->
-            <div class="houses-section" style="margin-bottom: 1.5rem; background: white; border-radius: 1.5rem; border: 1px solid #e5e7eb; padding: 1.5rem 2rem; position: relative;">
+            <!-- Thanh tìm kiếm -->
+            <div style="margin-bottom: 1rem;">
+                <div style="position: relative; max-width: 400px;">
+                    <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.875rem;"></i>
+                    <input type="text" id="searchHouseRoom" placeholder="Tìm kiếm theo tên phòng, tên nhà..." style="width: 100%; padding: 0.625rem 0.75rem 0.625rem 2.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; outline: none; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);" onfocus="this.style.borderColor='#1D4ED8'; this.style.boxShadow='0 0 0 3px rgba(29, 78, 216, 0.1)';" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';" oninput="filterHousesAndRooms(this.value)">
+                </div>
+            </div>
+
+            <!-- Danh sách nhà trọ và phòng trọ trong cùng một div -->
+            <div class="houses-section" style="margin-bottom: 1.5rem; background: white; border-radius: 1rem; border: 1px solid #e5e7eb; padding: 0.96rem 1.6rem; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <!-- Phần nhà trọ -->
                 <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #f3f4f6;">
                     <div style="display: flex; align-items: flex-start; gap: 2rem; flex: 1; overflow-x: hidden; width: 100%; position: relative;">
                         <div style="display: flex; gap: 1rem; min-width: max-content;">
@@ -132,25 +194,22 @@
                         </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Danh sách phòng dạng grid với phân trang -->
-            <div class="rooms-section" style="position: relative;">
-                <div class="rooms-grid" id="rooms-container">
-                    <!-- Phòng sẽ được thêm vào đây -->
-                </div>
-                
-                <!-- Nút Thêm Phòng và mũi tên ở góc phải -->
-                <div style="position: absolute; top: 0; right: 0; display: flex; flex-direction: column; gap: 0.75rem; z-index: 10;">
-                    <!-- Nút Thêm Phòng -->
+                <!-- Phần danh sách phòng -->
+                <div class="rooms-section" style="position: relative;">
+                    <div class="rooms-grid" id="rooms-container">
+                        <!-- Phòng sẽ được thêm vào đây -->
+                    </div>
                     
-                    <!-- Nút mũi tên chuyển trang -->
-                    <button id="rooms-next-btn" class="rooms-nav-btn-top" onclick="nextRoomsPage()" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); transition: all 0.2s;">
-                        <i class="fas fa-chevron-right" style="color: white; font-size: 1.25rem;"></i>
-                    </button>
-                    <button id="rooms-prev-btn" class="rooms-nav-btn-top" onclick="prevRoomsPage()" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); transition: all 0.2s;">
-                        <i class="fas fa-chevron-left" style="color: white; font-size: 1.25rem;"></i>
-                    </button>
+                    <!-- Nút mũi tên chuyển trang phòng -->
+                    <div style="position: absolute; top: 0; right: 0; display: flex; flex-direction: column; gap: 0.75rem; z-index: 10;">
+                        <button id="rooms-next-btn" class="rooms-nav-btn-top" onclick="nextRoomsPage()" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); transition: all 0.2s;">
+                            <i class="fas fa-chevron-right" style="color: white; font-size: 1.25rem;"></i>
+                        </button>
+                        <button id="rooms-prev-btn" class="rooms-nav-btn-top" onclick="prevRoomsPage()" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); transition: all 0.2s;">
+                            <i class="fas fa-chevron-left" style="color: white; font-size: 1.25rem;"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -416,6 +475,8 @@
         </div>
     </div>
 
-    <script src="js/property.js"></script>
+    </main>
+</div>
+<script src="js/property.js"></script>
 </body>
 </html>

@@ -1,107 +1,98 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Yêu cầu Bảo trì</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#1e40af",
-              "background-light": "#F8F9FA",
-              "background-dark": "#111827",
-              "sidebar-bg": "#1e3a8a",
-              "sidebar-bg-dark": "#0f172a",
-              status: {
-                  red: "#EF4444",
-                  yellow: "#F59E0B",
-                  green: "#10B981",
-                  gray: "#9CA3AF"
-              }
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yêu cầu Bảo trì</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#009688",
+                        "background-light": "#f3f4f6",
+                        "background-dark": "#111827",
+                        "sidebar-bg": "#1e3a8a",
+                        "sidebar-bg-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': "0.75rem",
+                        '2xl': "1rem",
+                        '3xl': "1.5rem",
+                    },
+                },
             },
-            fontFamily: {
-              display: ["'Be Vietnam Pro'", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.5rem",
-              'xl': "0.75rem",
-              '2xl': "1rem",
-            },
-            boxShadow: {
-                'card': '0 2px 5px -1px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.05)',
-            }
-          },
-        },
-      };
+        };
     </script>
-    <link rel="stylesheet" href="css/maintenance.css"/>
+<link rel="stylesheet" href="css/trangchu.css"/>
+<link rel="stylesheet" href="css/maintenance.css"/>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-display antialiased min-h-screen">
 <div class="main-container">
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-icon">
-                <span class="material-icons-outlined">home</span>
-            </div>
-            <div class="logo-text">
-                <h1>TroViet</h1>
-                <p>Công Chủ nhà</p>
-            </div>
-        </div>
-        <div class="user-section">
-            <div class="user-avatar">
-                <span class="material-icons-outlined">person</span>
-            </div>
-            <div class="user-info">
-                <p>Admin</p>
-                <p>admin@troviet.com</p>
-            </div>
-            <button class="notif-btn">
-                <span class="material-icons-outlined">notifications</span>
-            </button>
-        </div>
-        <nav class="nav-menu">
-            <a class="nav-link" href="trangchu.html">
-                <span class="material-icons-outlined nav-icon">bar_chart</span>
-                <span>Tổng quan</span>
-            </a>
-            <a class="nav-link" href="property.html">
-                <span class="material-icons-outlined nav-icon">apartment</span>
-                <span>Bất động sản</span>
-            </a>
-            <a class="nav-link" href="contract.html">
-                <span class="material-icons-outlined nav-icon">people_outline</span>
-                <span>Người thuê</span>
-            </a>
-            <a class="nav-link" href="invoices.html">
-                <span class="material-icons-outlined nav-icon">attach_money</span>
-                <span>Hóa đơn</span>
-            </a>
-            <a class="nav-link active" href="maintenance.html">
-                <span class="material-icons-outlined nav-icon">build</span>
-                <span>Bảo trì</span>
-            </a>
-        </nav>
-        <div class="sidebar-footer">
-            <a class="nav-link" href="#">
-                <span class="material-icons-outlined nav-icon">settings</span>
-                <span>Cài đặt</span>
-            </a>
-            <a class="nav-link" href="#">
-                <span class="material-icons-outlined nav-icon">logout</span>
-                <span>Đăng xuất</span>
-            </a>
-        </div>
-    </aside>
-    
-    <main class="main-content">
+<aside class="sidebar">
+<div class="sidebar-header">
+<div class="logo-icon">
+<span class="material-icons-outlined">home</span>
+</div>
+<div class="logo-text">
+<h1>TroViet</h1>
+<p>Công Chủ nhà</p>
+</div>
+</div>
+<div class="user-section">
+<div class="user-avatar">
+<span class="material-icons-outlined">person</span>
+</div>
+<div class="user-info">
+<p>Admin</p>
+<p>admin@troviet.com</p>
+</div>
+<button class="notif-btn">
+<span class="material-icons-outlined">notifications</span>
+</button>
+</div>
+<nav class="nav-menu">
+<a class="nav-link" href="trangchu.html">
+<span class="material-icons-outlined nav-icon">bar_chart</span>
+<span>Tổng quan</span>
+</a>
+<a class="nav-link" href="property.html">
+<span class="material-icons-outlined nav-icon">apartment</span>
+<span>Bất động sản</span>
+</a>
+<a class="nav-link" href="contract.html">
+<span class="material-icons-outlined nav-icon">people_outline</span>
+<span>Người thuê</span>
+</a>
+<a class="nav-link" href="invoices.html">
+<span class="material-icons-outlined nav-icon">attach_money</span>
+<span>Hóa đơn</span>
+</a>
+<a class="nav-link active" href="maintenance.html">
+<span class="material-icons-outlined nav-icon">build</span>
+<span>Bảo trì</span>
+</a>
+</nav>
+<div class="sidebar-footer">
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">settings</span>
+<span>Cài đặt</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">logout</span>
+<span>Đăng xuất</span>
+</a>
+</div>
+</aside>
+<main class="main-content bg-background-light dark:bg-background-dark p-6 md:p-10 transition-colors duration-200">
         <div class="content-wrapper">
             <header>
                 <h1 class="text-3xl font-bold text-primary dark:text-blue-400 mb-1">Yêu cầu Bảo trì</h1>
@@ -348,9 +339,7 @@
         </div>
     </main>
 </div>
-
 <script src="js/maintenance.js"></script>
-
 </body>
 </html>
 

@@ -361,10 +361,20 @@
     }
 
     // Load danh sách Phòng
-    async function loadRooms(houseId) {
+    async function loadRooms(houseId, searchTerm = '') {
         try {
             const res = await fetch(`${API_URL}/rooms?house_id=${houseId}`);
-            allRooms = await res.json();
+            let rooms = await res.json();
+            
+            // Lọc phòng theo tên nếu có searchTerm
+            if (searchTerm && searchTerm.trim()) {
+                const term = searchTerm.toLowerCase().trim();
+                rooms = rooms.filter(room => 
+                    room.room_number.toLowerCase().includes(term)
+                );
+            }
+            
+            allRooms = rooms;
             currentRoomsPage = 0; // Reset về trang đầu
             renderRoomsPage();
         } catch (err) {
@@ -702,28 +712,35 @@
         };
 
         try {
-            const res = await fetch(`${API_URL}/rooms/${currentRoomId}`, {
+            // Đảm bảo currentRoomId là số nguyên hợp lệ
+            const id = parseInt(currentRoomId);
+            if (isNaN(id) || id <= 0) {
+                throw new Error('ID phòng không hợp lệ');
+            }
+            
+            const res = await fetch(`${API_URL}/rooms/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
             
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+            }
+            
             const data = await res.json();
 
-            if (res.ok) {
-                alert("Cập nhật phòng thành công!");
-                setEditMode(false);
-                isEditMode = false;
-                loadStats(); // Cập nhật thống kê
-                if (currentHouseId) loadRooms(currentHouseId); // Cập nhật danh sách phòng
-                // Tải lại chi tiết phòng để hiển thị dữ liệu mới
-                await viewRoomDetail(currentRoomId);
-            } else {
-                alert("Lỗi: " + (data.message || "Không thể cập nhật phòng"));
-            }
+            alert("Cập nhật phòng thành công!");
+            setEditMode(false);
+            isEditMode = false;
+            loadStats(); // Cập nhật thống kê
+            if (currentHouseId) loadRooms(currentHouseId); // Cập nhật danh sách phòng
+            // Tải lại chi tiết phòng để hiển thị dữ liệu mới
+            await viewRoomDetail(id);
         } catch (err) {
-            console.error(err);
-            alert("Lỗi khi cập nhật phòng!");
+            console.error("Lỗi khi cập nhật phòng:", err);
+            alert("Lỗi khi cập nhật phòng: " + err.message);
         }
     }
 
@@ -862,6 +879,59 @@
         } catch (err) {
             console.error(err);
             alert("Lỗi khi cập nhật nhà trọ!");
+        }
+    }
+
+    // --- TÌM KIẾM NHÀ TRỌ VÀ PHÒNG ---
+    function filterHousesAndRooms(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+        
+        if (!term) {
+            // Nếu không có từ khóa, hiển thị tất cả
+            renderHousesPage();
+            if (currentHouseId) loadRooms(currentHouseId);
+            return;
+        }
+        
+        // Lọc nhà trọ theo tên
+        const filteredHouses = allHouses.filter(house => 
+            house.house_name.toLowerCase().includes(term) ||
+            (house.address && house.address.toLowerCase().includes(term))
+        );
+        
+        // Nếu có nhà trọ khớp, hiển thị nhà đầu tiên và lọc phòng
+        if (filteredHouses.length > 0) {
+            const matchedHouse = filteredHouses[0];
+            currentHouseId = matchedHouse.house_id;
+            
+            // Render lại danh sách nhà (chỉ hiển thị nhà khớp)
+            const container = document.getElementById('house-tabs-container');
+            container.innerHTML = '';
+            
+            filteredHouses.forEach(house => {
+                if (house.house_id != currentHouseId) {
+                    const houseIcon = createHouseIcon(house);
+                    container.appendChild(houseIcon);
+                }
+            });
+            
+            // Hiển thị nhà active
+            displayActiveHouse(matchedHouse);
+            document.getElementById('active-house-card').style.display = 'block';
+            
+            // Load và lọc phòng
+            if (currentHouseId) {
+                loadRooms(currentHouseId, term); // Truyền searchTerm để lọc phòng
+            }
+        } else {
+            // Không có nhà nào khớp, ẩn card active và chỉ lọc phòng nếu đang có nhà được chọn
+            document.getElementById('active-house-card').style.display = 'none';
+            const container = document.getElementById('house-tabs-container');
+            container.innerHTML = '<span style="font-size:0.9rem; color:#666">Không tìm thấy nhà trọ nào</span>';
+            
+            if (currentHouseId) {
+                loadRooms(currentHouseId, term); // Vẫn lọc phòng trong nhà hiện tại
+            }
         }
     }
 

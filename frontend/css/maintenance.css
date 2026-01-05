@@ -1,14 +1,5 @@
 * { box-sizing: border-box; }
-body { 
-    font-family: 'Be Vietnam Pro', sans-serif; 
-    background-color: #F8F9FA;
-    color: #1f2937;
-    transition: background-color 0.2s, color 0.2s;
-}
-body.dark { 
-    background-color: #111827; 
-    color: #e5e7eb;
-}
+/* Body styles đã được định nghĩa trong trangchu.css */
 
 /* Layout */
 .main-container { 
@@ -170,6 +161,19 @@ body.dark .sidebar {
     background-color: #374151;
 }
 .material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 

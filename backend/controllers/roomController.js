@@ -69,6 +69,68 @@ const getRoomById = async (req, res) => {
     }
 };
 
+// Cập nhật Phòng
+const updateRoom = async (req, res) => {
+    const roomId = req.params.id;
+    const { room_number, floor, area, rent, facilities, services } = req.body;
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        // 1. Cập nhật thông tin phòng
+        await connection.query(`
+            UPDATE rooms 
+            SET room_number = ?, floor = ?, area_m2 = ?, base_rent = ?, facilities = ?
+            WHERE room_id = ?
+        `, [room_number, floor || null, area || null, rent, facilities || null, roomId]);
+
+        // 2. Xóa tất cả dịch vụ cũ của phòng
+        await connection.query('DELETE FROM room_services WHERE room_id = ?', [roomId]);
+
+        // 3. Thêm lại dịch vụ mới nếu có
+        if (services && Array.isArray(services) && services.length > 0) {
+            // Lấy danh sách service_id từ tên dịch vụ
+            for (const svc of services) {
+                if (svc.name && svc.price) {
+                    // Tìm hoặc tạo service
+                    let [serviceRows] = await connection.query(
+                        'SELECT service_id FROM services WHERE service_name = ? AND service_type = ?',
+                        [svc.name, svc.type || 'Theo số (kWh/khối)']
+                    );
+
+                    let serviceId;
+                    if (serviceRows.length === 0) {
+                        // Tạo service mới nếu chưa có
+                        const [insertResult] = await connection.query(
+                            'INSERT INTO services (service_name, service_type) VALUES (?, ?)',
+                            [svc.name, svc.type || 'Theo số (kWh/khối)']
+                        );
+                        serviceId = insertResult.insertId;
+                    } else {
+                        serviceId = serviceRows[0].service_id;
+                    }
+
+                    // Thêm vào room_services
+                    await connection.query(
+                        'INSERT INTO room_services (room_id, service_id, price) VALUES (?, ?, ?)',
+                        [roomId, serviceId, svc.price]
+                    );
+                }
+            }
+        }
+
+        await connection.commit();
+        res.json({ message: 'Cập nhật phòng thành công' });
+    } catch (err) {
+        await connection.rollback();
+        console.error('Update Room Error:', err);
+        res.status(500).json({ message: 'Lỗi khi cập nhật phòng', error: err.message });
+    } finally {
+        connection.release();
+    }
+};
+
 // Tạo Phòng mới
 const createRoom = async (req, res) => {
     const { house_id, room_number, floor, area, rent, facilities } = req.body;
@@ -93,6 +155,7 @@ const createRoom = async (req, res) => {
 module.exports = {
     getRooms,
     getRoomById,
-    createRoom
+    createRoom,
+    updateRoom
 };
 

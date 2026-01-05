@@ -1,42 +1,98 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TroViet - Quản lý người thuê</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="css/contract.css">
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TroViet - Quản lý người thuê</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#009688",
+                        "background-light": "#f3f4f6",
+                        "background-dark": "#111827",
+                        "sidebar-bg": "#1e3a8a",
+                        "sidebar-bg-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': "0.75rem",
+                        '2xl': "1rem",
+                        '3xl': "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<link rel="stylesheet" href="css/trangchu.css"/>
+<link rel="stylesheet" href="css/contract.css">
 </head>
 <body>
-
-    <aside class="sidebar">
-        <div class="brand">
-            <div class="brand-icon"><i class="fa-solid fa-house"></i></div>
-            <div class="brand-text"><h2>TroViet</h2><span>Cổng Chủ nhà</span></div>
-        </div>
-        <div class="user-profile">
-            <div class="avatar-small"><i class="fa-solid fa-user"></i></div>
-            <div class="user-info"><h4>Admin</h4><p>admin@troviet.com</p></div>
-            <i class="fa-regular fa-bell" style="margin-left: auto; color: #9ca3af;"></i>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-chart-column"></i>Tổng quan</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-building"></i>Bất động sản</a></li>
-            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa-solid fa-users"></i>Người thuê</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-dollar-sign"></i>Hóa đơn</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-wrench"></i>Bảo trì</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-gear"></i>Cài đặt</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></li>
-            </ul>
-        </div>
-    </aside>
-
-    <main class="main-content">
+<div class="main-container">
+<aside class="sidebar">
+<div class="sidebar-header">
+<div class="logo-icon">
+<span class="material-icons-outlined">home</span>
+</div>
+<div class="logo-text">
+<h1>TroViet</h1>
+<p>Công Chủ nhà</p>
+</div>
+</div>
+<div class="user-section">
+<div class="user-avatar">
+<span class="material-icons-outlined">person</span>
+</div>
+<div class="user-info">
+<p>Admin</p>
+<p>admin@troviet.com</p>
+</div>
+<button class="notif-btn">
+<span class="material-icons-outlined">notifications</span>
+</button>
+</div>
+<nav class="nav-menu">
+<a class="nav-link" href="trangchu.html">
+<span class="material-icons-outlined nav-icon">bar_chart</span>
+<span>Tổng quan</span>
+</a>
+<a class="nav-link" href="property.html">
+<span class="material-icons-outlined nav-icon">apartment</span>
+<span>Bất động sản</span>
+</a>
+<a class="nav-link active" href="contract.html">
+<span class="material-icons-outlined nav-icon">people_outline</span>
+<span>Người thuê</span>
+</a>
+<a class="nav-link" href="invoices.html">
+<span class="material-icons-outlined nav-icon">attach_money</span>
+<span>Hóa đơn</span>
+</a>
+<a class="nav-link" href="maintenance.html">
+<span class="material-icons-outlined nav-icon">build</span>
+<span>Bảo trì</span>
+</a>
+</nav>
+<div class="sidebar-footer">
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">settings</span>
+<span>Cài đặt</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-icons-outlined nav-icon">logout</span>
+<span>Đăng xuất</span>
+</a>
+</div>
+</aside>
+<main class="main-content bg-background-light dark:bg-background-dark p-6 md:p-10 transition-colors duration-200">
         <header class="page-header">
             <div class="page-title">
                 <h1>Quản lý Người thuê nhà</h1>
@@ -282,6 +338,8 @@
         </div>
     </div>
 
-    <script src="js/contract.js"></script>
+    </main>
+</div>
+<script src="js/contract.js"></script>
 </body>
 </html>
