@@ -12,25 +12,42 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#009688", // Teal color from the active menu
-                        "background-light": "#f3f4f6", // Light gray background
-                        "background-dark": "#111827", // Dark blue/gray background
-                        "sidebar-bg": "#1e3a8a", // Deep blue for sidebar
-                        "sidebar-bg-dark": "#0f172a",
+                        primary: "#009688", // Teal/Green from screenshot
+                        secondary: "#1e3a8a", // Sidebar Blue
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#111827",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1f2937",
+                        "text-light": "#1f2937",
+                        "text-dark": "#f3f4f6",
+                        "muted-light": "#6b7280",
+                        "muted-dark": "#9ca3af",
                     },
                     fontFamily: {
                         display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
                     },
                     borderRadius: {
                         DEFAULT: "0.5rem",
-                        'xl': "0.75rem",
-                        '2xl': "1rem",
-                        '3xl': "1.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
                     },
                 },
             },
         };
     </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 <link rel="stylesheet" href="css/trangchu.css"/>
 </head>
 <body>

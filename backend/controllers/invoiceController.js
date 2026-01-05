@@ -111,8 +111,8 @@ const createInvoice = async (req, res) => {
                 else if (item.name.toLowerCase().includes('internet')) serviceType = 'Internet';
 
                 await connection.query(
-                    `INSERT INTO service_details (invoice_id, service_type, previous_reading, current_reading, unit_price, amount, recorded_date)
-                     VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE())`,
+                    `INSERT INTO service_details (invoice_id, service_type, previous_reading, current_reading, unit_price, amount)
+                     VALUES (?, ?, ?, ?, ?, ?)`,
                     [invoiceId, serviceType, item.old || null, item.new || null, item.price || 0, item.amount]
                 );
             }
