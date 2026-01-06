@@ -419,8 +419,9 @@
                         ? '<span style="font-size:10px; background:#f3f4f6; padding:2px 6px; border-radius:4px;">Phát sinh</span>' 
                         : '<span style="font-size:10px; background:#eff6ff; color:blue; padding:2px 6px; border-radius:4px;">Hàng tháng</span>';
     
+                    const invoiceId = parseInt(inv.invoice_id) || 0;
                     const row = `
-                        <tr>
+                        <tr style="cursor: pointer;" onclick="viewInvoiceDetail(${invoiceId})">
                             <td class="font-bold">P.${inv.room_number}</td>
                             <td>${inv.full_name}</td>
                             <td>${typeLabel}</td>
@@ -428,12 +429,12 @@
                             <td style="color: #6b7280;">${formatDate(inv.created_at)}</td>
                             <td style="color: #6b7280;">${formatDate(inv.due_date)}</td>
                             <td>${badgeHtml}</td>
-                            <td class="text-right">
+                            <td class="text-right" onclick="event.stopPropagation();">
                                  ${inv.display_status !== 'Paid' ? 
-                                    `<button class="btn-icon" onclick="markPaid(${inv.invoice_id})" title="Xác nhận thanh toán"><span class="material-symbols-outlined" style="color:green; font-size:18px;">check_circle</span></button>` 
+                                    `<button class="btn-icon" onclick="markPaid(${invoiceId})" title="Xác nhận thanh toán"><span class="material-symbols-outlined" style="color:green; font-size:18px;">check_circle</span></button>` 
                                     : ''}
                                  ${inv.display_status !== 'Paid' ? 
-                                    `<button class="btn-icon delete" onclick="deleteInvoice(${inv.invoice_id})" title="Xóa hóa đơn" style="color:#ef4444;"><span class="material-symbols-outlined" style="font-size:18px;">delete</span></button>`
+                                    `<button class="btn-icon delete" onclick="deleteInvoice(${invoiceId})" title="Xóa hóa đơn" style="color:#ef4444;"><span class="material-symbols-outlined" style="font-size:18px;">delete</span></button>`
                                     : ''}
                             </td>
                         </tr>
@@ -574,8 +575,9 @@
                 }
                 const data = await res.json();
     
-                // 1. Điền giá thuê phòng
-                document.getElementById('roomPrice').value = formatCurrency(data.rent_amount).replace(/\./g, '');
+                // 1. Điền giá thuê phòng (format với dấu chấm phân cách)
+                const rentAmount = data.rent_amount || 0;
+                document.getElementById('roomPrice').value = formatCurrency(rentAmount).replace(/\./g, '');
     
                 // 2. Render tất cả dịch vụ từ phòng
                 if (data.services && data.services.length > 0) {
@@ -583,6 +585,9 @@
                 } else {
                     renderServices([]);
                 }
+                
+                // 3. Tính lại tổng sau khi load dữ liệu
+                calculateTotal();
     
             } catch (err) {
                 console.error("Lỗi lấy chi tiết hợp đồng:", err);
@@ -592,38 +597,47 @@
     
         // --- TÍNH TOÁN TỔNG TIỀN ---
         function calculateTotal() {
-            const roomPrice = parseFloat(document.getElementById('roomPrice').value.replace(/\./g, '')) || 0;
+            // Lấy giá tiền phòng và parse (loại bỏ dấu chấm và khoảng trắng)
+            const roomPriceInput = document.getElementById('roomPrice');
+            const roomPriceValue = roomPriceInput ? roomPriceInput.value.toString().replace(/[\.\s]/g, '') : '0';
+            const roomPrice = parseFloat(roomPriceValue) || 0;
+            
             let totalServices = 0;
             
             // Tính toán từng dịch vụ
-            roomServices.forEach(svc => {
-                if (svc.hasMeter) {
-                    // Dịch vụ có chỉ số (điện/nước)
-                    const oldInput = document.querySelector(`.service-old[data-service-id="${svc.id}"]`);
-                    const newInput = document.querySelector(`.service-new[data-service-id="${svc.id}"]`);
-                    const usageEl = document.querySelector(`.service-usage[data-service-id="${svc.id}"]`);
-                    const totalEl = document.querySelector(`.service-total[data-service-id="${svc.id}"]`);
-                    
-                    if (oldInput && newInput && usageEl && totalEl) {
-                        const oldVal = parseFloat(oldInput.value) || 0;
-                        const newVal = parseFloat(newInput.value) || 0;
-                        let usage = newVal - oldVal;
-                        if (usage < 0) usage = 0;
+            if (roomServices && roomServices.length > 0) {
+                roomServices.forEach(svc => {
+                    if (svc.hasMeter) {
+                        // Dịch vụ có chỉ số (điện/nước)
+                        const oldInput = document.querySelector(`.service-old[data-service-id="${svc.id}"]`);
+                        const newInput = document.querySelector(`.service-new[data-service-id="${svc.id}"]`);
+                        const usageEl = document.querySelector(`.service-usage[data-service-id="${svc.id}"]`);
+                        const totalEl = document.querySelector(`.service-total[data-service-id="${svc.id}"]`);
                         
-                        const total = usage * svc.price;
-                        totalServices += total;
-                        
-                        usageEl.innerText = usage;
-                        totalEl.innerText = formatCurrency(total);
+                        if (oldInput && newInput && usageEl && totalEl) {
+                            const oldVal = parseFloat(oldInput.value) || 0;
+                            const newVal = parseFloat(newInput.value) || 0;
+                            let usage = newVal - oldVal;
+                            if (usage < 0) usage = 0;
+                            
+                            const total = usage * svc.price;
+                            totalServices += total;
+                            
+                            usageEl.innerText = usage;
+                            totalEl.innerText = formatCurrency(total);
+                        }
+                    } else {
+                        // Dịch vụ tính theo tháng
+                        totalServices += svc.price;
                     }
-                } else {
-                    // Dịch vụ tính theo tháng
-                    totalServices += svc.price;
-                }
-            });
+                });
+            }
             
             const grandTotal = roomPrice + totalServices;
-            document.getElementById('grandTotal').innerHTML = `${formatCurrency(grandTotal)} <span style="font-size: 0.875rem; font-weight: 500; color: #9ca3af;">VND</span>`;
+            const grandTotalEl = document.getElementById('grandTotal');
+            if (grandTotalEl) {
+                grandTotalEl.innerHTML = `${formatCurrency(grandTotal)} <span style="font-size: 0.875rem; font-weight: 500; color: #9ca3af;">VND</span>`;
+            }
         }
     
         function calcIncidental() {
@@ -830,7 +844,260 @@
                 formMonthly.classList.add('hidden');
             }
         }
+        
+        // --- XEM CHI TIẾT HÓA ĐƠN ---
+        async function viewInvoiceDetail(invoiceId) {
+            // Validate và parse invoiceId
+            const id = parseInt(invoiceId);
+            if (isNaN(id) || id <= 0) {
+                alert('ID hóa đơn không hợp lệ');
+                return;
+            }
+            
+            toggleInvoiceDetailModal(true);
+            
+            const content = document.getElementById('invoice-detail-content');
+            content.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <span class="material-symbols-outlined" style="font-size: 48px; color: #9ca3af;">hourglass_empty</span>
+                    <p style="color: #6b7280; margin-top: 1rem;">Đang tải thông tin...</p>
+                </div>
+            `;
+            
+            try {
+                const res = await fetch(`${API_URL}/invoices/${id}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                
+                const invoice = await res.json();
+                
+                // Format ngày
+                const createdDate = formatDate(invoice.created_at);
+                const dueDate = formatDate(invoice.due_date);
+                const paidDate = invoice.paid_date ? formatDate(invoice.paid_date) : null;
+                
+                // Trạng thái
+                let statusBadge = '';
+                if (invoice.display_status === 'Paid') {
+                    statusBadge = '<span class="badge badge-success" style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;">Đã thanh toán</span>';
+                } else if (invoice.display_status === 'Overdue') {
+                    statusBadge = `<span class="badge badge-danger" style="background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;">Quá hạn ${invoice.overdue_days} ngày</span>`;
+                } else {
+                    statusBadge = '<span class="badge badge-warning" style="background: #fef9c3; color: #854d0e; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;">Chờ thanh toán</span>';
+                }
+                
+                // Loại hóa đơn
+                const typeLabel = invoice.invoice_type === 'Incidental' 
+                    ? '<span style="font-size:12px; background:#f3f4f6; padding:4px 8px; border-radius:4px; font-weight: 500;">Phát sinh</span>' 
+                    : '<span style="font-size:12px; background:#eff6ff; color:#2563eb; padding:4px 8px; border-radius:4px; font-weight: 500;">Hàng tháng</span>';
+                
+                // Chi tiết các khoản phí
+                let itemsHtml = '';
+                if (invoice.items && invoice.items.length > 0) {
+                    invoice.items.forEach(item => {
+                        const isMeterService = item.previous_reading !== null && item.current_reading !== null;
+                        
+                        if (isMeterService) {
+                            const usage = (parseFloat(item.current_reading) || 0) - (parseFloat(item.previous_reading) || 0);
+                            itemsHtml += `
+                                <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <div>
+                                            <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">${item.service_name || 'Dịch vụ'}</p>
+                                            <p style="font-size: 12px; color: #6b7280;">${item.service_type || ''}</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <p style="font-weight: 700; font-size: 16px; color: var(--primary-color);">${formatCurrency(item.amount || 0)} đ</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e5e7eb;">
+                                        <div>
+                                            <p style="font-size: 11px; color: #6b7280; margin-bottom: 4px;">CHỈ SỐ CŨ</p>
+                                            <p style="font-weight: 600;">${item.previous_reading || 0}</p>
+                                        </div>
+                                        <div>
+                                            <p style="font-size: 11px; color: var(--primary-color); margin-bottom: 4px;">CHỈ SỐ MỚI</p>
+                                            <p style="font-weight: 600; color: var(--primary-color);">${item.current_reading || 0}</p>
+                                        </div>
+                                        <div>
+                                            <p style="font-size: 11px; color: #6b7280; margin-bottom: 4px;">TIÊU THỤ</p>
+                                            <p style="font-weight: 600;">${usage} ${item.service_name && item.service_name.toLowerCase().includes('điện') ? 'kWh' : 'm³'}</p>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 0.5rem; font-size: 12px; color: #6b7280;">
+                                        Đơn giá: ${formatCurrency(item.unit_price || 0)} đ
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            itemsHtml += `
+                                <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">${item.service_name || 'Dịch vụ'}</p>
+                                            <p style="font-size: 12px; color: #6b7280;">${item.service_type || 'Theo tháng'}</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <p style="font-weight: 700; font-size: 16px; color: var(--primary-color);">${formatCurrency(item.amount || 0)} đ</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                } else {
+                    // Nếu không có items, hiển thị tiền phòng
+                    itemsHtml = `
+                        <div style="background: #f9fafb; padding: 1rem; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p style="font-weight: 600; font-size: 14px;">Tiền phòng</p>
+                                    <p style="font-size: 12px; color: #6b7280;">Giá thuê cố định theo hợp đồng</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <p style="font-weight: 700; font-size: 16px; color: var(--primary-color);">${formatCurrency(invoice.room_rent || 0)} đ</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                content.innerHTML = `
+                    <div style="padding: 0 0.5rem;">
+                        <!-- Thông tin chung -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div class="flex items-center gap-2" style="color: var(--primary-color); margin-bottom: 0.75rem;">
+                                <span class="material-symbols-outlined">info</span>
+                                <h4 class="font-bold text-sm uppercase">Thông tin chung</h4>
+                            </div>
+                            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Phòng</p>
+                                        <p style="font-weight: 600;">P.${invoice.room_number} - ${invoice.house_name || ''}</p>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Người thuê</p>
+                                        <p style="font-weight: 600;">${invoice.full_name}</p>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Loại hóa đơn</p>
+                                        <p>${typeLabel}</p>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Trạng thái</p>
+                                        <p>${statusBadge}</p>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Ngày tạo</p>
+                                        <p style="font-weight: 600;">${createdDate}</p>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Hạn thanh toán</p>
+                                        <p style="font-weight: 600;">${dueDate}</p>
+                                    </div>
+                                    ${paidDate ? `
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Ngày thanh toán</p>
+                                        <p style="font-weight: 600; color: #16a34a;">${paidDate}</p>
+                                    </div>
+                                    ` : ''}
+                                    ${invoice.billing_period ? `
+                                    <div>
+                                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">Kỳ hóa đơn</p>
+                                        <p style="font-weight: 600;">${invoice.billing_period}</p>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chi tiết các khoản phí -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <div class="flex items-center gap-2" style="color: var(--primary-color); margin-bottom: 0.75rem;">
+                                <span class="material-symbols-outlined">attach_money</span>
+                                <h4 class="font-bold text-sm uppercase">Chi tiết các khoản phí</h4>
+                            </div>
+                            ${itemsHtml}
+                        </div>
+                        
+                        <!-- Tổng cộng -->
+                        <div style="background: #eff6ff; padding: 1rem; border-radius: 8px; border: 2px solid #bfdbfe;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <p style="font-weight: 700; font-size: 14px; text-transform: uppercase; color: #1e40af;">Tổng cộng hóa đơn</p>
+                                <p style="font-weight: 700; font-size: 20px; color: var(--primary-color);">${formatCurrency(invoice.total_amount || 0)} đ</p>
+                            </div>
+                        </div>
+                        
+                        ${invoice.notes ? `
+                        <div style="margin-top: 1.5rem;">
+                            <p style="font-size: 12px; color: #6b7280; margin-bottom: 0.5rem; font-weight: 600;">Ghi chú</p>
+                            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 3px solid var(--primary-color);">
+                                <p style="font-size: 14px; color: #374151; white-space: pre-wrap;">${invoice.notes}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                document.getElementById('detail-invoice-number').textContent = `Hóa đơn #${invoice.invoice_id}`;
+                
+            } catch (err) {
+                console.error('View Invoice Detail Error:', err);
+                content.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <span class="material-symbols-outlined" style="font-size: 48px; color: #ef4444;">error</span>
+                        <p style="color: #6b7280; margin-top: 1rem;">Không thể tải thông tin hóa đơn</p>
+                        <p style="color: #9ca3af; font-size: 12px; margin-top: 0.5rem;">${err.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function toggleInvoiceDetailModal(show) {
+            const modal = document.getElementById('invoiceDetailModal');
+            if (show) {
+                modal.classList.add('open');
+            } else {
+                modal.classList.remove('open');
+            }
+        }
     </script>
+    
+    <!-- Modal Chi tiết Hóa đơn -->
+    <div id="invoiceDetailModal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-backdrop" onclick="toggleInvoiceDetailModal(false)"></div>
+    
+        <div class="modal-container">
+            <div class="modal-center">
+                <div class="modal-panel" style="max-width: 800px;">
+                    
+                    <div class="modal-header">
+                        <div>
+                            <h3 class="modal-title">Chi tiết Hóa đơn</h3>
+                            <p style="font-size: 0.875rem; color: #6b7280; margin-top: 2px;" id="detail-invoice-number"></p>
+                        </div>
+                        <button type="button" class="btn-icon" onclick="toggleInvoiceDetailModal(false)">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+    
+                    <div class="modal-body custom-scrollbar" id="invoice-detail-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <span class="material-symbols-outlined" style="font-size: 48px; color: #9ca3af;">hourglass_empty</span>
+                            <p style="color: #6b7280; margin-top: 1rem;">Đang tải thông tin...</p>
+                        </div>
+                    </div>
+    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" onclick="toggleInvoiceDetailModal(false)">Đóng</button>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </div>
     
     </body>
 </html>

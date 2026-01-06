@@ -201,6 +201,41 @@ const updateContract = async (req, res) => {
     }
 };
 
+// Tìm kiếm tenant theo số điện thoại hoặc CCCD
+const searchTenant = async (req, res) => {
+    try {
+        const { phone, id_card } = req.query;
+        
+        if (!phone && !id_card) {
+            return res.status(400).json({ message: 'Cần cung cấp số điện thoại hoặc số CCCD' });
+        }
+        
+        let sql = 'SELECT tenant_id, full_name, phone, email, id_card_number, plain_password FROM tenants WHERE 1=1';
+        const params = [];
+        
+        if (phone) {
+            sql += ' AND phone = ?';
+            params.push(phone);
+        } else if (id_card) {
+            sql += ' AND id_card_number = ?';
+            params.push(id_card);
+        }
+        
+        sql += ' LIMIT 1';
+        
+        const [rows] = await pool.query(sql, params);
+        
+        if (rows.length === 0) {
+            return res.json(null);
+        }
+        
+        res.json(rows[0]);
+    } catch (err) {
+        console.error('Search Tenant Error:', err);
+        res.status(500).json({ message: 'Lỗi khi tìm kiếm khách thuê', error: err.message });
+    }
+};
+
 // Chấm dứt Hợp đồng
 const terminateContract = async (req, res) => {
     const connection = await pool.getConnection();
@@ -261,6 +296,7 @@ module.exports = {
     updateContract,
     terminateContract,
     getContractStats,
-    getActiveContracts
+    getActiveContracts,
+    searchTenant
 };
 

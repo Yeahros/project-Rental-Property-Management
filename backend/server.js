@@ -21,6 +21,7 @@ app.use('/api/contracts', require('./routes/contractRoutes'));
 app.use('/api/invoices', require('./routes/invoiceRoutes'));
 app.use('/api/maintenance', require('./routes/maintenanceRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/tenant/dashboard', require('./routes/tenantDashboardRoutes'));
 
 // Khởi chạy server
 const PORT = process.env.PORT || 3000;

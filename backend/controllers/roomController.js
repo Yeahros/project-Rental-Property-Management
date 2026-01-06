@@ -143,7 +143,8 @@ const createRoom = async (req, res) => {
 
         const [result] = await pool.execute(sql, [house_id, room_number, floor, area, rent, facilities]);
 
-        await pool.execute(`UPDATE boarding_houses SET total_rooms = total_rooms + 1 WHERE house_id = ?`, [house_id]);
+        // Note: total_rooms column không tồn tại trong database, đã xóa dòng UPDATE này
+        // await pool.execute(`UPDATE boarding_houses SET total_rooms = total_rooms + 1 WHERE house_id = ?`, [house_id]);
 
         res.json({ message: 'Tạo phòng thành công', id: result.insertId });
     } catch (err) {
@@ -152,10 +153,63 @@ const createRoom = async (req, res) => {
     }
 };
 
+// Xóa Phòng
+const deleteRoom = async (req, res) => {
+    const roomId = req.params.id;
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        // Kiểm tra xem phòng có đang được thuê không
+        const [contracts] = await connection.query(
+            'SELECT * FROM contracts WHERE room_id = ? AND status = "Active"',
+            [roomId]
+        );
+
+        if (contracts.length > 0) {
+            await connection.rollback();
+            return res.status(400).json({ message: 'Không thể xóa phòng đang được thuê' });
+        }
+
+        // Kiểm tra trạng thái phòng
+        const [rooms] = await connection.query(
+            'SELECT status FROM rooms WHERE room_id = ?',
+            [roomId]
+        );
+
+        if (rooms.length === 0) {
+            await connection.rollback();
+            return res.status(404).json({ message: 'Không tìm thấy phòng' });
+        }
+
+        if (rooms[0].status !== 'Vacant') {
+            await connection.rollback();
+            return res.status(400).json({ message: 'Chỉ có thể xóa phòng trống' });
+        }
+
+        // Xóa dịch vụ của phòng
+        await connection.query('DELETE FROM room_services WHERE room_id = ?', [roomId]);
+
+        // Xóa phòng
+        await connection.query('DELETE FROM rooms WHERE room_id = ?', [roomId]);
+
+        await connection.commit();
+        res.json({ message: 'Xóa phòng thành công' });
+    } catch (err) {
+        await connection.rollback();
+        console.error('Delete Room Error:', err);
+        res.status(500).json({ message: 'Lỗi khi xóa phòng', error: err.message });
+    } finally {
+        connection.release();
+    }
+};
+
 module.exports = {
     getRooms,
     getRoomById,
     createRoom,
-    updateRoom
+    updateRoom,
+    deleteRoom
 };
 

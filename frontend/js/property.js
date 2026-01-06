@@ -10,6 +10,7 @@
     let currentHousesPage = 0; // Trang hiện tại của danh sách nhà trọ
     let housesPerPage = 5; // Số nhà trọ hiển thị mỗi trang (không tính nhà đang chọn)
     let allHouses = []; // Lưu tất cả nhà trọ để phân trang
+    let currentRoomStatus = null; // Lưu trạng thái phòng hiện tại (Vacant/Occupied/Maintenance)
 
     // --- 1. UTILS (TIỆN ÍCH) ---
     function formatCurrency(amount) {
@@ -593,6 +594,9 @@
             }
             const room = await res.json();
             
+            // Lưu trạng thái phòng
+            currentRoomStatus = room.status || 'Vacant';
+            
             // Điền thông tin phòng
             document.getElementById('inp-room-detail-number').value = room.room_number || '';
             document.getElementById('inp-room-detail-floor').value = room.floor || '';
@@ -617,6 +621,16 @@
                 }
             } else {
                 tenantSection.style.display = 'none';
+            }
+            
+            // Hiển thị/ẩn nút xóa phòng dựa trên trạng thái
+            const deleteBtn = document.getElementById('btn-delete-room');
+            if (deleteBtn) {
+                if (currentRoomStatus === 'Vacant') {
+                    deleteBtn.style.display = 'inline-flex';
+                } else {
+                    deleteBtn.style.display = 'none';
+                }
             }
             
             // Load dịch vụ
@@ -672,6 +686,16 @@
         document.getElementById('btn-edit-room').style.display = edit ? 'none' : 'inline-block';
         document.getElementById('btn-save-room').style.display = edit ? 'inline-block' : 'none';
         document.getElementById('btn-add-service-detail').style.display = edit ? 'block' : 'none';
+        
+        // Ẩn nút xóa khi đang chỉnh sửa, chỉ hiển thị khi không chỉnh sửa và phòng trống
+        const deleteBtn = document.getElementById('btn-delete-room');
+        if (deleteBtn) {
+            if (edit) {
+                deleteBtn.style.display = 'none';
+            } else {
+                deleteBtn.style.display = currentRoomStatus === 'Vacant' ? 'inline-flex' : 'none';
+            }
+        }
         
         // Cập nhật title
         if (edit) {
@@ -741,6 +765,47 @@
         } catch (err) {
             console.error("Lỗi khi cập nhật phòng:", err);
             alert("Lỗi khi cập nhật phòng: " + err.message);
+        }
+    }
+
+    // Xóa phòng
+    async function deleteRoom() {
+        if (!currentRoomId) return alert("Lỗi: Không xác định được phòng!");
+        
+        if (currentRoomStatus !== 'Vacant') {
+            alert("Không thể xóa phòng đang được thuê hoặc đang bảo trì!");
+            return;
+        }
+        
+        if (!confirm(`Bạn có chắc chắn muốn xóa phòng này? Hành động này không thể hoàn tác!`)) {
+            return;
+        }
+        
+        try {
+            const id = parseInt(currentRoomId);
+            if (isNaN(id) || id <= 0) {
+                throw new Error('ID phòng không hợp lệ');
+            }
+            
+            const res = await fetch(`${API_URL}/rooms/${id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+            }
+            
+            const data = await res.json();
+            
+            alert("Xóa phòng thành công!");
+            closeModal('modal-room-detail');
+            loadStats(); // Cập nhật thống kê
+            if (currentHouseId) loadRooms(currentHouseId); // Cập nhật danh sách phòng
+        } catch (err) {
+            console.error("Lỗi khi xóa phòng:", err);
+            alert("Lỗi khi xóa phòng: " + err.message);
         }
     }
 

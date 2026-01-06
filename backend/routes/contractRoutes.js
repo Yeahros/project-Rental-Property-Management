@@ -6,6 +6,7 @@ const upload = require('../config/multer');
 router.get('/', contractController.getContracts);
 router.get('/stats', contractController.getContractStats);
 router.get('/active', contractController.getActiveContracts);
+router.get('/search-tenant', contractController.searchTenant);
 router.get('/:id', contractController.getContractById);
 router.post('/', upload.fields([
     { name: 'cccd_front', maxCount: 1 },

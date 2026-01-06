@@ -1,0 +1,213 @@
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayEasy Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#00bfa5", // Teal color from the top card
+              secondary: "#1a237e", // Deep blue from sidebar/buttons
+              "background-light": "#f3f4f6",
+              "background-dark": "#0f172a",
+              "card-light": "#ffffff",
+              "card-dark": "#1e293b",
+              "text-main-light": "#1f2937",
+              "text-main-dark": "#f3f4f6",
+              "text-sub-light": "#6b7280",
+              "text-sub-dark": "#9ca3af",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.75rem", // 12px
+              xl: "1rem", // 16px
+            },
+          },
+        },
+      };
+    </script>
+</head><body class="bg-background-light dark:bg-background-dark font-sans text-text-main-light dark:text-text-main-dark antialiased h-screen flex overflow-hidden">
+<aside class="w-64 bg-secondary dark:bg-[#0a0f2c] text-white flex flex-col flex-shrink-0 transition-colors duration-300">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-white/10 p-2 rounded-lg">
+<span class="material-icons-outlined text-white">home</span>
+</div>
+<div>
+<h1 class="font-bold text-xl leading-none">TroViet</h1>
+<p class="text-xs text-blue-200">Cổng Người thuê</p>
+</div>
+</div>
+<div class="px-6 py-4 border-b border-blue-800/50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold">
+<span class="material-icons-outlined">person</span>
+</div>
+<div class="flex-1 min-w-0">
+<p id="user-name" class="text-sm font-medium truncate">Nguyễn Thị Mai</p>
+<p id="user-email" class="text-xs text-blue-200 truncate">mai.nguyen@email.com</p>
+</div>
+<span class="material-icons-outlined text-blue-200 text-sm cursor-pointer">notifications</span>
+</div>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary rounded-lg text-white shadow-md transition-all" href="#">
+<span class="material-icons-outlined">dashboard</span>
+<span class="font-medium">Tổng quan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-white/10 rounded-lg transition-all" href="#">
+<span class="material-icons-outlined">receipt_long</span>
+<span class="font-medium">Hóa đơn</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-white/10 rounded-lg transition-all" href="#">
+<span class="material-icons-outlined">build</span>
+<span class="font-medium">Bảo trì</span>
+</a>
+</nav>
+<div class="p-4 space-y-2 border-t border-blue-800/50">
+<a class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-white/10 rounded-lg transition-all" href="#">
+<span class="material-icons-outlined">settings</span>
+<span class="font-medium">Cài đặt</span>
+</a>
+<a id="logout-btn" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-white/10 rounded-lg transition-all cursor-pointer" href="#">
+<span class="material-icons-outlined">logout</span>
+<span class="font-medium">Đăng xuất</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-6 lg:p-8">
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-bold text-secondary dark:text-blue-300">Tổng quan</h2>
+<p id="greeting-name" class="text-text-sub-light dark:text-text-sub-dark mt-1">Xin chào, Emma Wilson</p>
+</div>
+<div class="text-right">
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark uppercase font-semibold">Hôm nay</p>
+<p id="current-date" class="text-secondary dark:text-blue-300 font-medium">Chủ nhật, 14 tháng 12, 2025</p>
+</div>
+</header>
+<section class="bg-primary dark:bg-teal-700 rounded-xl p-6 lg:p-8 text-white shadow-lg mb-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-icons" style="font-size: 150px;">home</span>
+</div>
+<div class="relative z-10">
+<div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+<h3 class="text-sm font-medium opacity-90">Bất động sản Cho thuê của Bạn</h3>
+<div id="room-selector" class="relative hidden">
+<div id="room-selector-btn" class="bg-white/20 rounded px-2 py-0.5 text-xs flex items-center gap-1 cursor-pointer hover:bg-white/30 transition-colors">
+<span>Chọn phòng khác</span>
+<span class="material-icons-outlined text-xs">expand_more</span>
+</div>
+<div id="room-dropdown" class="hidden absolute top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 min-w-[200px] max-h-60 overflow-y-auto border border-gray-200 dark:border-gray-700">
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+<div>
+<h2 id="room-number" class="text-3xl font-bold mb-1">Căn hộ 204B</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-4 mt-6">
+<div>
+<p class="text-xs opacity-70 mb-1">Tòa nhà</p>
+<p id="house-name" class="font-medium text-lg">Sunrise Heights</p>
+</div>
+<div>
+<p class="text-xs opacity-70 mb-1">Địa chỉ</p>
+<p id="address" class="font-medium text-lg">123 Đường Chính</p>
+</div>
+<div>
+<p class="text-xs opacity-70 mb-1">Hợp đồng Hết hạn</p>
+<p id="contract-end-date" class="font-medium text-lg">31 tháng 12, 2025</p>
+</div>
+</div>
+</div>
+<div class="bg-white/20 p-3 rounded-xl hidden md:block">
+<span class="material-icons-outlined text-4xl">home</span>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 space-y-8">
+<div id="next-payment-card" class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-semibold text-secondary dark:text-blue-300">Thanh toán Tiếp theo</h3>
+<p class="text-sm text-text-sub-light dark:text-text-sub-dark">Thanh toán tiền thuê của bạn đúng hạn</p>
+</div>
+<span id="next-payment-status" class="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200 text-xs px-3 py-1 rounded-full font-medium">Đúng Hạn</span>
+</div>
+<div class="mb-6">
+<p class="text-sm text-text-sub-light dark:text-text-sub-dark mb-1">Số tiền Phải trả</p>
+<p id="next-payment-amount" class="text-5xl font-bold text-secondary dark:text-blue-300 mb-2">0 đ</p>
+<p id="next-payment-due-date" class="text-sm text-text-sub-light dark:text-text-sub-dark">Đang tải...</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mb-8">
+<button class="w-full bg-secondary text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-900 transition-colors shadow-md">Thanh toán Ngay</button>
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 pt-6">
+<div class="flex justify-between items-center mb-4">
+<h4 class="font-medium text-secondary dark:text-blue-300">Thanh toán Gần đây</h4>
+<a class="text-sm text-primary hover:underline" href="#">Xem Tất cả</a>
+</div>
+<div id="recent-payments-list" class="space-y-3">
+<p class="text-center text-gray-500 py-4">Đang tải...</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+<div class="md:col-span-3 bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-1.5 bg-purple-100 dark:bg-purple-900/30 rounded text-purple-600 dark:text-purple-300">
+<span class="material-icons-outlined text-sm">payments</span>
+</div>
+<h3 class="font-bold text-lg text-secondary dark:text-blue-300">Tiền chi hàng tháng</h3>
+</div>
+<div id="monthly-expenses-chart" class="flex items-end justify-between h-48 gap-2">
+<p class="text-center text-gray-500 py-4">Đang tải...</p>
+</div>
+</div>
+<div class="md:col-span-2 bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-lg text-secondary dark:text-blue-300">Mức sử dụng Tiện ích</h3>
+<div class="flex gap-2">
+<span class="text-[10px] bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-icons text-[10px]">bolt</span> Điện
+</span>
+<span class="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-icons text-[10px]">water_drop</span> Nước
+</span>
+</div>
+</div>
+<div class="flex-1 relative min-h-[192px]">
+<svg id="utility-usage-chart" class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 300 150">
+<line stroke="#e5e7eb" stroke-dasharray="4" stroke-width="1" x1="0" x2="300" y1="150" y2="150"></line>
+<line stroke="#e5e7eb" stroke-dasharray="4" stroke-width="1" x1="0" x2="300" y1="100" y2="100"></line>
+<line stroke="#e5e7eb" stroke-dasharray="4" stroke-width="1" x1="0" x2="300" y1="50" y2="50"></line>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4">
+<div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold text-secondary dark:text-blue-300">Yêu cầu Bảo trì của Tôi</h3>
+<a class="text-sm text-primary hover:underline" href="#">Xem Tất cả</a>
+</div>
+<div id="maintenance-requests-list" class="flex flex-col gap-4">
+<p class="text-center text-gray-500 py-4">Đang tải...</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script src="js/tenant-dashboard.js"></script>
+</body></html>

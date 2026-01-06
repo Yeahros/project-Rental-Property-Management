@@ -101,11 +101,18 @@
             
             // Tự động điền giá tiền khi chọn phòng
             select.onchange = function() {
-                const price = this.options[this.selectedIndex].getAttribute('data-price');
-                // Tìm input tiền thuê (giả sử là input thứ 2 có class has-icon)
-                const moneyInputs = document.querySelectorAll('.has-icon');
-                if(moneyInputs[1] && price) {
-                    moneyInputs[1].value = formatCurrency(price).replace(' ₫', '').replace(/\./g, '');
+                const selectedOption = this.options[this.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                
+                if (price) {
+                    // Format số tiền với dấu chấm phân cách hàng nghìn (ví dụ: 5.500.000)
+                    const formattedPrice = new Intl.NumberFormat('vi-VN').format(parseInt(price));
+                    
+                    // Điền vào input tiền thuê phòng
+                    const rentInput = document.getElementById('inp-rent');
+                    if (rentInput) {
+                        rentInput.value = formattedPrice;
+                    }
                 }
             };
 
@@ -186,13 +193,6 @@
                 else if (c.status === 'Terminated') { badgeClass = 'badge-danger'; statusText = 'Đã chấm dứt'; }
                 else if (c.status === 'Expired') { badgeClass = 'badge-neutral'; statusText = 'Hết hạn'; }
 
-                // Tạo mã KH (format: T-0204B)
-                // Lấy số từ room_number và format lại
-                const roomNum = c.room_number || '';
-                const roomNumberOnly = roomNum.replace(/\D/g, ''); // Lấy chỉ số
-                const roomLetter = roomNum.replace(/\d/g, ''); // Lấy chỉ chữ
-                const customerCode = `T-${roomNumberOnly.padStart(4, '0')}${roomLetter}`;
-                
                 // Lấy initials từ tên
                 const initials = c.full_name ? c.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';
                 
@@ -206,7 +206,6 @@
                             <div class="avatar-large bg-blue-light">${initials}</div>
                             <div class="user-details">
                                 <h3>${c.full_name} <span class="badge ${badgeClass}">${statusText}</span></h3>
-                                <p style="font-size: 13px; color: #6b7280; margin-top: 4px;">Mã KH: ${customerCode}</p>
                             </div>
                         </div>
                         
@@ -510,7 +509,129 @@
     }
 
     // --- INIT ---
+    // Tìm kiếm và tự động điền thông tin tenant
+    async function searchAndFillTenantInfo(searchBy, value) {
+        if (!value || value.trim() === '') {
+            return;
+        }
+        
+        // Chỉ tìm kiếm nếu đã nhập đủ (ít nhất 8 ký tự cho số điện thoại hoặc CCCD)
+        if (value.length < 8) {
+            return;
+        }
+        
+        try {
+            const params = new URLSearchParams();
+            if (searchBy === 'phone') {
+                params.append('phone', value.trim());
+            } else if (searchBy === 'id_card') {
+                params.append('id_card', value.trim());
+            }
+            
+            const res = await fetch(`${API_URL}/contracts/search-tenant?${params.toString()}`);
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            const tenant = await res.json();
+            
+            if (tenant) {
+                // Chỉ điền các trường còn trống để tránh ghi đè dữ liệu người dùng đã nhập
+                const fullnameInput = document.getElementById('inp-fullname');
+                const phoneInput = document.getElementById('inp-phone');
+                const idCardInput = document.getElementById('inp-id-card');
+                const passwordInput = document.getElementById('inp-password');
+                
+                // Điền họ tên nếu còn trống
+                if (tenant.full_name && (!fullnameInput.value || fullnameInput.value.trim() === '')) {
+                    fullnameInput.value = tenant.full_name;
+                }
+                
+                // Điền số điện thoại nếu còn trống và không phải là trường đang tìm kiếm
+                if (tenant.phone && searchBy !== 'phone' && (!phoneInput.value || phoneInput.value.trim() === '')) {
+                    phoneInput.value = tenant.phone;
+                }
+                
+                // Điền CCCD nếu còn trống và không phải là trường đang tìm kiếm
+                if (tenant.id_card_number && searchBy !== 'id_card' && (!idCardInput.value || idCardInput.value.trim() === '')) {
+                    idCardInput.value = tenant.id_card_number;
+                }
+                
+                // Điền mật khẩu nếu còn trống
+                if (tenant.plain_password && (!passwordInput.value || passwordInput.value.trim() === '')) {
+                    passwordInput.value = tenant.plain_password;
+                }
+                
+                // Hiển thị thông báo tìm thấy
+                showNotification('Đã tìm thấy thông tin khách thuê và tự động điền!', 'success');
+            }
+        } catch (err) {
+            console.error('Search Tenant Error:', err);
+            // Không hiển thị lỗi nếu không tìm thấy (đó là trường hợp bình thường)
+        }
+    }
+    
+    // Helper function để hiển thị thông báo
+    function showNotification(message, type = 'info') {
+        // Tạo element thông báo tạm thời
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#10B981' : '#3B82F6'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         loadContracts();
         loadContractStats(); // Gọi hàm thống kê khi load trang
+        
+        // Thêm event listener cho input số điện thoại
+        const phoneInput = document.getElementById('inp-phone');
+        if (phoneInput) {
+            let phoneTimeout;
+            phoneInput.addEventListener('blur', function() {
+                clearTimeout(phoneTimeout);
+                phoneTimeout = setTimeout(() => {
+                    const phoneValue = this.value.trim();
+                    if (phoneValue && phoneValue.length >= 8) {
+                        // Tìm kiếm và điền thông tin (hàm sẽ tự kiểm tra và chỉ điền các trường còn trống)
+                        searchAndFillTenantInfo('phone', phoneValue);
+                    }
+                }, 300); // Debounce 300ms
+            });
+        }
+        
+        // Thêm event listener cho input CCCD
+        const idCardInput = document.getElementById('inp-id-card');
+        if (idCardInput) {
+            let idCardTimeout;
+            idCardInput.addEventListener('blur', function() {
+                clearTimeout(idCardTimeout);
+                idCardTimeout = setTimeout(() => {
+                    const idCardValue = this.value.trim();
+                    if (idCardValue && idCardValue.length >= 8) {
+                        // Tìm kiếm và điền thông tin (hàm sẽ tự kiểm tra và chỉ điền các trường còn trống)
+                        searchAndFillTenantInfo('id_card', idCardValue);
+                    }
+                }, 300); // Debounce 300ms
+            });
+        }
     });

@@ -140,9 +140,86 @@ const updateInvoiceStatus = async (req, res) => {
     }
 };
 
+// Lấy chi tiết một hóa đơn theo ID
+const getInvoiceById = async (req, res) => {
+    try {
+        const invoiceId = req.params.id;
+        
+        // Lấy thông tin hóa đơn
+        const [invoices] = await pool.query(`
+            SELECT i.*, 
+                   r.room_number, 
+                   r.house_id,
+                   h.house_name,
+                   h.address,
+                   t.full_name,
+                   t.phone,
+                   t.email,
+                   c.contract_id,
+                   CASE 
+                       WHEN i.status = 'Paid' THEN 'Paid'
+                       WHEN i.status = 'Unpaid' AND i.due_date < CURRENT_DATE() THEN 'Overdue'
+                       ELSE 'Unpaid'
+                   END as display_status,
+                   DATEDIFF(CURRENT_DATE(), i.due_date) as overdue_days
+            FROM invoices i
+            JOIN contracts c ON i.contract_id = c.contract_id
+            JOIN rooms r ON c.room_id = r.room_id
+            JOIN boarding_houses h ON r.house_id = h.house_id
+            JOIN tenants t ON c.tenant_id = t.tenant_id
+            WHERE i.invoice_id = ?
+        `, [invoiceId]);
+        
+        if (invoices.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy hóa đơn' });
+        }
+        
+        const invoice = invoices[0];
+        
+        // Lấy chi tiết các khoản phí
+        const [details] = await pool.query(`
+            SELECT 
+                id.usage_id,
+                id.previous_reading,
+                id.current_reading,
+                id.unit_price,
+                id.amount
+            FROM invoice_details id
+            WHERE id.invoice_id = ?
+            ORDER BY id.usage_id
+        `, [invoiceId]);
+        
+        // Map dữ liệu và thêm service_name dựa trên thứ tự (item đầu = điện, item thứ 2 = nước, còn lại = dịch vụ khác)
+        invoice.items = (details || []).map((item, index) => {
+            let serviceName = 'Dịch vụ';
+            let serviceType = 'Theo số (kWh/khối)';
+            
+            if (index === 0) {
+                serviceName = 'Tiền điện';
+            } else if (index === 1) {
+                serviceName = 'Tiền nước';
+            } else {
+                serviceName = `Dịch vụ ${index - 1}`;
+            }
+            
+            return {
+                ...item,
+                service_name: serviceName,
+                service_type: serviceType
+            };
+        });
+        
+        res.json(invoice);
+    } catch (err) {
+        console.error('Get Invoice By ID Error:', err);
+        res.status(500).json({ message: 'Lỗi khi lấy chi tiết hóa đơn', error: err.message });
+    }
+};
+
 module.exports = {
     getInvoiceStats,
     getInvoices,
+    getInvoiceById,
     createInvoice,
     updateInvoiceStatus
 };
